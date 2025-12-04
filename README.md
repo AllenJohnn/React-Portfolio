@@ -1,5 +1,4 @@
-cat > README.md << 'EOF'
-# Allen's Dynamic Portfolio
+#  Portfolio
 
 A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS. Features smooth animations, interactive components, and a clean design.
 
