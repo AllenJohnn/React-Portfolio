@@ -10,7 +10,6 @@ import { Footer } from "@/components/portfolio/Footer";
 import { SectionDivider } from "@/components/portfolio/SectionDivider";
 import { Preloader } from "@/components/portfolio/Preloader";
 import { CursorEffect } from "@/components/portfolio/CursorEffect";
-// REMOVE THIS LINE: import { ThemeToggle } from "@/components/portfolio/ThemeToggle";
 
 const Index = () => {
   return (
@@ -20,7 +19,6 @@ const Index = () => {
       <main className="relative min-h-screen overflow-x-hidden">
         <ScrollProgress />
         <Navbar />
-        {/* REMOVE THIS LINE: <ThemeToggle /> */}
         <ScrollToTop />
         
         <Hero />
