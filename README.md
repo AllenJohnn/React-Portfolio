@@ -3,7 +3,7 @@
 A personal portfolio website showcasing my skills, projects, and contact details.  
 Built to highlight my frontend development abilities with a clean UI and smooth animations.
 
-https://allenjohnjoy.vercel.app/
+https://allenjohn-portfolio.vercel.app/
 
 ---
 
