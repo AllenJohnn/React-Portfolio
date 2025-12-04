@@ -1,24 +1,42 @@
-#  Portfolio
+# Allen John Portfolio Website
 
-A modern, responsive portfolio website built with React, TypeScript, and Tailwind CSS. Features smooth animations, interactive components, and a clean design.
+A personal portfolio website showcasing my skills, projects, and contact details.  
+Built to highlight my frontend development abilities with a clean UI and smooth animations.
 
-## Features
-- 🚀 Modern React with TypeScript
-- 🎨 Tailwind CSS for styling
-- ✨ Framer Motion animations
-- 📱 Fully responsive design
-- 🎯 Interactive project showcase
-- ⚡ Fast performance with Vite
+https://allenjohnjoy.vercel.app/
 
-## Tech Stack
-- **Frontend:** React, TypeScript, Tailwind CSS
-- **Animations:** Framer Motion
-- **Icons:** Lucide React
-- **Build Tool:** Vite
-- **UI Components:** Radix UI, shadcn/ui
+---
 
-## Getting Started
+## ⭐ Features
 
-### Installation
-```bash
-npm install
+- Responsive and modern UI  
+- Smooth scroll animations  
+- Projects showcase with GitHub links  
+- Contact form with WhatsApp and Email options  
+- Section-based navigation  
+
+---
+
+## 🛠 Tech Stack
+
+| Technology | Purpose |
+|-----------|----------|
+| **React (Vite)** | Component-based UI |
+| **TypeScript** | Type-safe development |
+| **Tailwind CSS** | Styling & responsive design |
+| **Framer Motion / GSAP** | Animations |
+| **React Icons** | Icons used across UI |
+---
+
+## 📌 Sections Overview
+
+| Section | Description |
+|--------|-------------|
+| **About** | Personal introduction + details |
+| **Skills** | Auto-scrolling skills showcase |
+| **Projects** | Cards linked to GitHub repositories |
+| **Contact** | Message via WhatsApp or Email |
+
+---
+
+
