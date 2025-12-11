@@ -9,6 +9,7 @@ import spotifyImg from "@/assets/projects/spotify.png";
 import medicineImg from "@/assets/projects/medicine.png";
 import fakenewsImg from "@/assets/projects/fakenews.png";
 import speedtestImg from "@/assets/projects/speedtest.png";
+import qrImg from "@/assets/projects/qrtools.png"; // <-- QuickQR thumbnail
 
 const projects = [
   {
@@ -29,6 +30,16 @@ const projects = [
     live: "https://playquickbench.vercel.app/",
     image: speedtestImg,
     color: "#667eea",
+  },
+  {
+    title: "QuickQR Tools",
+    description:
+      "A lightweight QR code generator offering live preview, custom colors, TinyURL shortening, and PNG/SVG export support. Designed with a clean, responsive UI for generating professional QR codes instantly.",
+    tech: ["HTML", "CSS", "JavaScript"],
+    github: "https://github.com/AllenJohnn/QuickQR-Tools",
+    live: "https://quickqr-tools.vercel.app/",
+    image: qrImg,
+    color: "#000000",
   },
   {
     title: "Personalized Medicine Recommending System",
@@ -132,7 +143,6 @@ export const Projects = () => {
 
                     {/* GitHub + Live Buttons */}
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-4">
-                      
                       {/* GitHub Button */}
                       <motion.a
                         href={project.github}
@@ -190,8 +200,7 @@ export const Projects = () => {
                           initial={{ opacity: 0, scale: 0.8 }}
                           animate={isInView ? { opacity: 1, scale: 1 } : {}}
                           transition={{
-                            delay:
-                              0.6 + index * 0.1 + techIndex * 0.05,
+                            delay: 0.6 + index * 0.1 + techIndex * 0.05,
                           }}
                           whileHover={{ scale: 1.1, y: -2 }}
                           className="text-xs px-3 py-1.5 rounded-full bg-primary/10 text-primary/80 font-medium cursor-default"
