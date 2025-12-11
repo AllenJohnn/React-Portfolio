@@ -36,7 +36,7 @@ const projects = [
     description:
       "A lightweight QR code generator offering live preview, custom colors, TinyURL shortening, and PNG/SVG export support. Designed with a clean, responsive UI for generating professional QR codes instantly.",
     tech: ["HTML", "CSS", "JavaScript"],
-    github: "https://github.com/AllenJohnn/QuickQR-Tools",
+    github: "https://github.com/AllenJohnn/QuickQR",
     live: "https://quickqr-tools.vercel.app/",
     image: qrImg,
     color: "#000000",
