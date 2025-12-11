@@ -85,7 +85,7 @@ export const Hero = () => {
               transition={{ duration: 0.6, delay: 0.7 }}
               className="text-lg text-muted-foreground mb-10 max-w-[520px] leading-relaxed"
             >
-              Creating beautiful, functional web experiences with clean code and modern design.
+              Developing sleek, responsive web experiences driven by clean code and smart engineering.
             </motion.p>
 
             {/* Buttons with magnetic effect */}
