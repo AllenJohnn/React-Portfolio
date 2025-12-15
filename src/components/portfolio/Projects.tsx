@@ -9,7 +9,9 @@ import spotifyImg from "@/assets/projects/spotify.png";
 import medicineImg from "@/assets/projects/medicine.png";
 import fakenewsImg from "@/assets/projects/fakenews.png";
 import speedtestImg from "@/assets/projects/speedtest.png";
-import qrImg from "@/assets/projects/qrtools.png"; // <-- QuickQR thumbnail
+import qrImg from "@/assets/projects/qrtools.png"; 
+import tabMemoryImg from "@/assets/projects/browser.png";  
+
 
 const projects = [
   {
@@ -42,6 +44,15 @@ const projects = [
     color: "#000000",
   },
   {
+  title: "Tab Memory Monitor",
+  description:
+    "A lightweight browser extension that monitors real-time memory usage of open tabs. Helps identify memory-heavy tabs and optimize overall browser performance with quick cleanup actions.",
+  tech: ["JavaScript", "Chrome Extensions", "Firefox Add-ons"],
+  github: "https://github.com/AllenJohnn/tab-memory-monitor",
+  image: tabMemoryImg,
+  color: "#2563eb",
+},
+{
     title: "Personalized Medicine Recommending System",
     description:
       "Intelligent medicine recommendation system that provides personalized suggestions based on symptoms using machine learning.",
