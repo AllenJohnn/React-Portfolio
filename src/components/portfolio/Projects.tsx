@@ -48,7 +48,7 @@ const projects = [
   description:
     "A lightweight browser extension that monitors real-time memory usage of open tabs. Helps identify memory-heavy tabs and optimize overall browser performance with quick cleanup actions.",
   tech: ["JavaScript", "Chrome Extensions", "Firefox Add-ons"],
-  github: "https://github.com/AllenJohnn/tab-memory-monitor",
+  github: "https://github.com/AllenJohnn/Browser-Memory-Extension",
   image: tabMemoryImg,
   color: "#2563eb",
 },
