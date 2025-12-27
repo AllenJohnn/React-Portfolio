@@ -1,57 +1,68 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const CursorEffect = () => {
-  const dot = useRef({ x: 0, y: 0 });
-  const outline = useRef({ x: 0, y: 0 });
-  const raf = useRef<number>();
+interface Particle {
+  id: number;
+  x: number;
+  y: number;
+}
 
-  const [pos, setPos] = useState({ x: 0, y: 0 });
-  const [ring, setRing] = useState({ x: 0, y: 0 });
-  const [visible, setVisible] = useState(false);
-  const [active, setActive] = useState(false);
-  const [idle, setIdle] = useState(false);
+export const CursorEffect = () => {
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [particles, setParticles] = useState<Particle[]>([]);
+  const [isVisible, setIsVisible] = useState(false);
+
+  const particleId = useRef(0);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
-    let idleTimer: NodeJS.Timeout;
+    const handleMouseMove = (e: MouseEvent) => {
+      // Throttle position updates (smoother)
+      if (!rafRef.current) {
+        rafRef.current = requestAnimationFrame(() => {
+          setMousePosition({ x: e.clientX, y: e.clientY });
+          rafRef.current = null;
+        });
+      }
 
-    const animate = () => {
-      outline.current.x += (dot.current.x - outline.current.x) * 0.18;
-      outline.current.y += (dot.current.y - outline.current.y) * 0.18;
+      setIsVisible(true);
 
-      setPos({ ...dot.current });
-      setRing({ ...outline.current });
-
-      raf.current = requestAnimationFrame(animate);
+      setParticles((prev) => [
+        ...prev.slice(-10),
+        {
+          id: particleId.current++,
+          x: e.clientX,
+          y: e.clientY,
+        },
+      ]);
     };
 
-    raf.current = requestAnimationFrame(animate);
+    const handleMouseLeave = () => setIsVisible(false);
+    const handleMouseEnter = () => setIsVisible(true);
 
-    const onMove = (e: MouseEvent) => {
-      dot.current = { x: e.clientX, y: e.clientY };
-      setVisible(true);
-      setIdle(false);
-
-      clearTimeout(idleTimer);
-      idleTimer = setTimeout(() => setIdle(true), 1500);
-    };
-
-    const onHover = (e: Event) => {
-      const el = e.target as HTMLElement;
-      setActive(!!el.closest("a, button, [data-cursor]"));
-    };
-
-    window.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseover", onHover);
-    document.addEventListener("mouseleave", () => setVisible(false));
+    window.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
-      cancelAnimationFrame(raf.current!);
-      window.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseover", onHover);
+      window.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+      if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, []);
 
+  // Cleanup particles naturally
+  useEffect(() => {
+    if (particles.length > 0) {
+      const timer = setTimeout(() => {
+        setParticles((prev) => prev.slice(1));
+      }, 120);
+      return () => clearTimeout(timer);
+    }
+  }, [particles]);
+
+  // Disable on touch devices
   if (
     typeof window !== "undefined" &&
     window.matchMedia("(pointer: coarse)").matches
@@ -61,33 +72,61 @@ export const CursorEffect = () => {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">
-      {/* DOT */}
+      {/* Glow */}
       <AnimatePresence>
-        {visible && !idle && (
+        {isVisible && (
           <motion.div
-            className="absolute w-1.5 h-1.5 rounded-full bg-primary"
-            style={{ left: pos.x, top: pos.y }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            initial={{ opacity: 0, scale: 0.6 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.6 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="absolute w-8 h-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/25 blur-md"
+            style={{
+              left: mousePosition.x,
+              top: mousePosition.y,
+            }}
           />
         )}
       </AnimatePresence>
 
-      {/* OUTLINE */}
+      {/* Particles */}
       <AnimatePresence>
-        {visible && !idle && (
+        {particles.map((particle, index) => (
           <motion.div
-            className="absolute w-8 h-8 rounded-full border border-primary/40"
-            style={{ left: ring.x, top: ring.y }}
-            animate={{
-              scale: active ? 1.6 : 1,
-              opacity: 0.9,
+            key={particle.id}
+            initial={{ opacity: 0.6, scale: 1 }}
+            animate={{ opacity: 0, scale: 0 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: 0.6,
+              delay: index * 0.015,
+              ease: "easeOut",
             }}
+            className="absolute w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/60"
+            style={{
+              left: particle.x,
+              top: particle.y,
+            }}
+          />
+        ))}
+      </AnimatePresence>
+
+      {/* Ring */}
+      <AnimatePresence>
+        {isVisible && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.7 }}
             transition={{
               type: "spring",
-              stiffness: 250,
-              damping: 22,
+              stiffness: 350,
+              damping: 26,
+            }}
+            className="absolute w-10 h-10 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/40"
+            style={{
+              left: mousePosition.x,
+              top: mousePosition.y,
             }}
           />
         )}
