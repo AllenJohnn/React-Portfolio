@@ -12,12 +12,10 @@ export const Footer = () => {
 
   return (
     <footer ref={ref} className="py-16 border-t border-border/30 relative overflow-hidden">
-      {/* Background decoration */}
       <div className="absolute inset-0 bg-gradient-to-t from-primary/[0.02] to-transparent" />
       
       <div className="container mx-auto px-[8%] relative z-10">
         <div className="flex flex-col items-center gap-8">
-          {/* Logo with animation */}
           <motion.a
             href="#home"
             initial={{ opacity: 0, y: 20 }}
@@ -29,7 +27,6 @@ export const Footer = () => {
             ALLEN.DEV
           </motion.a>
 
-          {/* Tagline */}
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -39,7 +36,6 @@ export const Footer = () => {
             Crafting frontend experiences with code & creativity
           </motion.p>
 
-          {/* Social Links with stagger */}
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -68,7 +64,6 @@ export const Footer = () => {
             </motion.a>
           </motion.div>
 
-          {/* Back to top button */}
           <motion.button
             onClick={scrollToTop}
             initial={{ opacity: 0, scale: 0 }}
@@ -81,7 +76,6 @@ export const Footer = () => {
             <ArrowUp size={20} />
           </motion.button>
 
-          {/* Copyright with heart animation */}
           <motion.p 
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
