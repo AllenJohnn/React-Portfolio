@@ -6,7 +6,6 @@ export const Preloader = () => {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    // Simulate loading progress
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -30,7 +29,6 @@ export const Preloader = () => {
           transition={{ duration: 0.8, ease: "easeInOut" }}
           className="fixed inset-0 z-[10000] bg-background flex flex-col items-center justify-center"
         >
-          {/* Logo animation */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -62,7 +60,6 @@ export const Preloader = () => {
             </motion.h1>
           </motion.div>
 
-          {/* Progress bar */}
           <div className="w-48 h-1 bg-border rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-gradient-primary rounded-full"
@@ -72,7 +69,6 @@ export const Preloader = () => {
             />
           </div>
 
-          {/* Loading text */}
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -82,7 +78,6 @@ export const Preloader = () => {
             Loading experience...
           </motion.p>
 
-          {/* Floating shapes */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {[...Array(5)].map((_, i) => (
               <motion.div
