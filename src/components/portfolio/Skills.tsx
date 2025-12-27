@@ -2,7 +2,6 @@ import { motion, useInView, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { LineReveal } from "./TextReveal";
 
-// Import skill icons
 import htmlIcon from "@/assets/skills/html.png";
 import cssIcon from "@/assets/skills/css.png";
 import jsIcon from "@/assets/skills/js.png";
@@ -21,7 +20,6 @@ const skills = [
   { name: "Angular", icon: angularIcon, color: "#DD0031" },
 ];
 
-// Duplicate for infinite scroll effect
 const allSkills = [...skills, ...skills, ...skills];
 
 export const Skills = () => {
@@ -37,7 +35,6 @@ export const Skills = () => {
 
   return (
     <section id="skills" className="py-24 relative overflow-hidden">
-      {/* Animated background */}
       <motion.div 
         style={{ y: backgroundY }}
         className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] via-transparent to-primary/[0.03]" 
@@ -45,7 +42,6 @@ export const Skills = () => {
       <div className="absolute inset-0 border-y border-border/30" />
       
       <div className="container mx-auto px-[8%]" ref={ref}>
-        {/* Header with reveal animation */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
@@ -63,14 +59,12 @@ export const Skills = () => {
           />
         </motion.div>
 
-        {/* Infinite scrolling skills with enhanced effects */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="relative overflow-hidden py-8"
         >
-          {/* Gradient masks for smooth fade */}
           <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
           <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
 
@@ -85,7 +79,6 @@ export const Skills = () => {
                 }}
                 className="skill-card flex-shrink-0 min-w-[140px] group relative"
               >
-                {/* Glow effect on hover */}
                 <div 
                   className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-xl"
                   style={{ backgroundColor: `${skill.color}20` }}
