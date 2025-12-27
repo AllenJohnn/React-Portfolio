@@ -45,7 +45,6 @@ export const Contact = () => {
 
   return (
     <section id="contact" className="py-24 relative overflow-hidden">
-      {/* Animated background */}
       <motion.div
         style={{ 
           y: useTransform(scrollYProgress, [0, 1], [0, -100]),
@@ -61,7 +60,6 @@ export const Contact = () => {
       />
       
       <div className="container mx-auto px-[8%]" ref={ref}>
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
@@ -98,7 +96,6 @@ export const Contact = () => {
           </motion.p>
         </motion.div>
 
-        {/* Contact Form */}
         <motion.form
           initial={{ opacity: 0, y: 50 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -107,7 +104,6 @@ export const Contact = () => {
           className="max-w-2xl mx-auto"
         >
           <div className="space-y-6">
-            {/* Name field */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -134,7 +130,6 @@ export const Contact = () => {
               />
             </motion.div>
             
-            {/* Email field */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -162,7 +157,6 @@ export const Contact = () => {
               />
             </motion.div>
             
-            {/* Message field */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -191,7 +185,6 @@ export const Contact = () => {
             </motion.div>
           </div>
 
-          {/* Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
