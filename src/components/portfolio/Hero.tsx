@@ -19,16 +19,13 @@ export const Hero = () => {
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Parallax background layers */}
       <ParallaxBackground />
 
-      {/* Floating background animation */}
       <div className="bg-float fixed inset-0 z-0 opacity-[0.03] pointer-events-none">
         <span></span><span></span><span></span><span></span>
         <span></span><span></span><span></span><span></span>
       </div>
 
-      {/* Gradient overlay */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -38,14 +35,12 @@ export const Hero = () => {
       
       <motion.div style={{ y, opacity, scale }} className="relative z-10 container mx-auto px-[8%] pt-32 pb-24">
         <div className="flex flex-wrap justify-between items-center gap-12">
-          {/* Left Content */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
             className="flex-1 min-w-[320px] max-w-[600px]"
           >
-            {/* Intro text */}
             <motion.p
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -55,7 +50,6 @@ export const Hero = () => {
               👋 Hello, my name is
             </motion.p>
 
-            {/* Name with staggered reveal */}
             <div className="overflow-hidden mb-2">
               <motion.h1
                 initial={{ y: "100%" }}
@@ -67,7 +61,6 @@ export const Hero = () => {
               </motion.h1>
             </div>
 
-            {/* Role with typing effect */}
             <div className="overflow-hidden mb-6">
               <motion.div
                 initial={{ y: "100%" }}
@@ -88,7 +81,6 @@ export const Hero = () => {
               Developing sleek, responsive web experiences driven by clean code and smart engineering.
             </motion.p>
 
-            {/* Buttons with magnetic effect */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -124,7 +116,6 @@ export const Hero = () => {
             </motion.div>
           </motion.div>
 
-          {/* Right Content - Profile Image with 3D effect */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
@@ -132,7 +123,6 @@ export const Hero = () => {
             className="flex-1 min-w-[300px] flex justify-center perspective-1000"
           >
             <div className="relative group">
-              {/* Animated decorative borders */}
               <motion.div 
                 animate={{ 
                   rotate: [0, 5, 0],
@@ -151,7 +141,6 @@ export const Hero = () => {
               />
               
               
-              {/* Image */}
               <motion.img
                 src={profileImg}
                 alt="Allen John"
@@ -165,7 +154,6 @@ export const Hero = () => {
           </motion.div>
         </div>
 
-        {/* Scroll indicator */}
         <motion.button
           onClick={scrollToAbout}
           initial={{ opacity: 0, y: 20 }}
