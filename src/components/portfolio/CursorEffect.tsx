@@ -8,50 +8,66 @@ interface Particle {
 }
 
 export const CursorEffect = () => {
-  const cursorRef = useRef({ x: 0, y: 0 });
-  const frame = useRef<number | null>(null);
+  const mouse = useRef({ x: 0, y: 0 });
+  const pos = useRef({ x: 0, y: 0 });
+  const raf = useRef<number>();
   const particleId = useRef(0);
 
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [renderPos, setRenderPos] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState<Particle[]>([]);
   const [visible, setVisible] = useState(false);
+  const [hovering, setHovering] = useState(false);
+  const [speed, setSpeed] = useState(0);
 
   useEffect(() => {
-    const updatePosition = () => {
-      setPosition({ ...cursorRef.current });
-      frame.current = null;
+    const lerp = (a: number, b: number, n: number) => a + (b - a) * n;
+
+    const animate = () => {
+      const dx = mouse.current.x - pos.current.x;
+      const dy = mouse.current.y - pos.current.y;
+
+      pos.current.x = lerp(pos.current.x, mouse.current.x, 0.15);
+      pos.current.y = lerp(pos.current.y, mouse.current.y, 0.15);
+
+      setSpeed(Math.min(Math.sqrt(dx * dx + dy * dy), 40));
+      setRenderPos({ ...pos.current });
+
+      raf.current = requestAnimationFrame(animate);
     };
 
+    raf.current = requestAnimationFrame(animate);
+    return () => raf.current && cancelAnimationFrame(raf.current);
+  }, []);
+
+  useEffect(() => {
     const onMove = (e: MouseEvent) => {
-      cursorRef.current = { x: e.clientX, y: e.clientY };
+      mouse.current = { x: e.clientX, y: e.clientY };
       setVisible(true);
 
-      if (!frame.current) {
-        frame.current = requestAnimationFrame(updatePosition);
-      }
-
-      setParticles((prev) => [
-        ...prev.slice(-10),
-        {
-          id: particleId.current++,
-          x: e.clientX,
-          y: e.clientY,
-        },
+      setParticles((p) => [
+        ...p.slice(-8),
+        { id: particleId.current++, x: e.clientX, y: e.clientY },
       ]);
     };
 
-    const onLeave = () => setVisible(false);
     const onEnter = () => setVisible(true);
+    const onLeave = () => setVisible(false);
+
+    const onHover = (e: Event) => {
+      const target = e.target as HTMLElement;
+      setHovering(!!target.closest("a, button"));
+    };
 
     window.addEventListener("mousemove", onMove);
-    document.addEventListener("mouseleave", onLeave);
     document.addEventListener("mouseenter", onEnter);
+    document.addEventListener("mouseleave", onLeave);
+    document.addEventListener("mouseover", onHover);
 
     return () => {
       window.removeEventListener("mousemove", onMove);
-      document.removeEventListener("mouseleave", onLeave);
       document.removeEventListener("mouseenter", onEnter);
-      if (frame.current) cancelAnimationFrame(frame.current);
+      document.removeEventListener("mouseleave", onLeave);
+      document.removeEventListener("mouseover", onHover);
     };
   }, []);
 
@@ -62,18 +78,34 @@ export const CursorEffect = () => {
     return null;
   }
 
+  const scale = hovering ? 1.8 : 1 + speed / 60;
+
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">
-      {/* Soft glow */}
+      {/* Outer glow */}
       <AnimatePresence>
         {visible && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.4 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.4 }}
-            transition={{ duration: 0.25 }}
-            className="absolute w-10 h-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/25 blur-xl"
-            style={{ left: position.x, top: position.y }}
+            className="absolute w-14 h-14 rounded-full bg-primary/20 blur-2xl"
+            style={{ left: renderPos.x, top: renderPos.y }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, scale }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Inner glow */}
+      <AnimatePresence>
+        {visible && (
+          <motion.div
+            className="absolute w-8 h-8 rounded-full bg-primary/40 blur-lg"
+            style={{ left: renderPos.x, top: renderPos.y }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, scale }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
           />
         )}
       </AnimatePresence>
@@ -83,34 +115,30 @@ export const CursorEffect = () => {
         {particles.map((p, i) => (
           <motion.div
             key={p.id}
-            initial={{ opacity: 0.6, scale: 1 }}
+            className="absolute w-2 h-2 rounded-full bg-primary/70"
+            style={{ left: p.x, top: p.y }}
+            initial={{ opacity: 0.8, scale: 1 }}
             animate={{ opacity: 0, scale: 0 }}
             exit={{ opacity: 0 }}
             transition={{
               duration: 0.6,
-              delay: i * 0.015,
+              delay: i * 0.02,
               ease: "easeOut",
             }}
-            className="absolute w-2 h-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/70"
-            style={{ left: p.x, top: p.y }}
           />
         ))}
       </AnimatePresence>
 
-      {/* Elastic ring */}
+      {/* Cursor ring */}
       <AnimatePresence>
         {visible && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.6 }}
-            transition={{
-              type: "spring",
-              stiffness: 420,
-              damping: 30,
-            }}
-            className="absolute w-12 h-12 -translate-x-1/2 -translate-y-1/2 rounded-full border border-primary/40"
-            style={{ left: position.x, top: position.y }}
+            className="absolute w-12 h-12 rounded-full border border-primary/50"
+            style={{ left: renderPos.x, top: renderPos.y }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, scale }}
+            exit={{ opacity: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
           />
         )}
       </AnimatePresence>
