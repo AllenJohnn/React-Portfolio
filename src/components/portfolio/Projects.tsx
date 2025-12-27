@@ -4,7 +4,6 @@ import { Github, ArrowUpRight } from "lucide-react";
 import { LineReveal } from "./TextReveal";
 import { TiltCard } from "./TiltCard";
 
-// Import project images
 import spotifyImg from "@/assets/projects/spotify.png";
 import medicineImg from "@/assets/projects/medicine.png";
 import fakenewsImg from "@/assets/projects/fakenews.png";
@@ -84,7 +83,6 @@ export const Projects = () => {
 
   return (
     <section id="projects" className="py-24 relative overflow-hidden">
-      {/* Background decoration */}
       <motion.div
         style={{
           y: useTransform(scrollYProgress, [0, 1], [100, -100]),
@@ -94,7 +92,6 @@ export const Projects = () => {
       />
 
       <div className="container mx-auto px-[8%]" ref={ref}>
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
@@ -112,7 +109,6 @@ export const Projects = () => {
           />
         </motion.div>
 
-        {/* Projects Grid */}
         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
           {projects.map((project, index) => (
             <motion.div
@@ -132,7 +128,6 @@ export const Projects = () => {
                   transition={{ duration: 0.3 }}
                   className="project-card group h-full"
                 >
-                  {/* Project Image */}
                   <div className="relative overflow-hidden aspect-video">
                     <motion.img
                       src={project.image}
@@ -142,7 +137,6 @@ export const Projects = () => {
                       className="w-full h-full object-cover"
                     />
 
-                    {/* Colored overlay */}
                     <motion.div
                       initial={{ opacity: 0 }}
                       whileHover={{ opacity: 1 }}
@@ -152,9 +146,7 @@ export const Projects = () => {
                       }}
                     />
 
-                    {/* GitHub + Live Buttons */}
                     <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center gap-4">
-                      {/* GitHub Button */}
                       <motion.a
                         href={project.github}
                         target="_blank"
@@ -168,7 +160,6 @@ export const Projects = () => {
                         <Github size={22} />
                       </motion.a>
 
-                      {/* Live Demo (only if present) */}
                       {project.live && (
                         <motion.a
                           href={project.live}
@@ -203,7 +194,6 @@ export const Projects = () => {
                       {project.description}
                     </p>
 
-                    {/* Tech Tags */}
                     <div className="flex flex-wrap gap-2">
                       {project.tech.map((tech, techIndex) => (
                         <motion.span
@@ -221,7 +211,6 @@ export const Projects = () => {
                       ))}
                     </div>
 
-                    {/* View Project */}
                     <motion.a
                       href={project.github}
                       target="_blank"
@@ -238,7 +227,6 @@ export const Projects = () => {
                       </motion.span>
                     </motion.a>
 
-                    {/* Live Demo Link (below text) */}
                     {project.live && (
                       <motion.a
                         href={project.live}
