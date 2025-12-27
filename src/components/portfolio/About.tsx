@@ -41,7 +41,6 @@ export const About = () => {
 
   return (
     <section id="about" className="py-24 relative overflow-hidden">
-      {/* Background decoration */}
       <motion.div
         style={{ y: useTransform(scrollYProgress, [0, 1], [0, -100]) }}
         className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
@@ -49,7 +48,6 @@ export const About = () => {
       
       <div className="container mx-auto px-[8%]" ref={ref}>
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Left - Image with 3D tilt */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -58,7 +56,6 @@ export const About = () => {
           >
             <TiltCard intensity={10}>
               <motion.div style={{ y: imageY }} className="relative">
-                {/* Animated borders */}
                 <motion.div 
                   animate={{ rotate: [0, 2, 0, -2, 0] }}
                   transition={{ duration: 10, repeat: Infinity }}
@@ -77,7 +74,6 @@ export const About = () => {
                   style={{ boxShadow: "0 25px 70px rgba(0, 0, 0, 0.5)" }}
                 />
 
-                {/* MCA Badge with bounce */}
                 <motion.div
                   initial={{ opacity: 0, scale: 0, rotate: -10 }}
                   animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
@@ -92,7 +88,6 @@ export const About = () => {
             </TiltCard>
           </motion.div>
 
-          {/* Right - Content with staggered animations */}
           <motion.div
             variants={containerVariants}
             initial="hidden"
@@ -116,7 +111,6 @@ export const About = () => {
               </p>
             </motion.div>
 
-            {/* Contact Details with hover effects */}
             <motion.div variants={itemVariants} className="space-y-3 py-4">
               <p><strong className="text-foreground">Name:</strong> <span className="text-muted-foreground">Allen John Joy</span></p>
               
@@ -158,7 +152,6 @@ export const About = () => {
               </div>
             </motion.div>
 
-            {/* Interests with staggered reveal */}
             <motion.div variants={itemVariants} className="pt-2">
               <div className="flex flex-wrap gap-3">
                 {interests.map((interest, index) => (
