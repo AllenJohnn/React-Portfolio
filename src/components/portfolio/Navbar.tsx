@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-// REMOVE THIS: import { ThemeToggle } from "./ThemeToggle";
 
 const navLinks = [
   { href: "#home", label: "Home" },
@@ -20,7 +19,6 @@ export const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
       
-      // Update active section based on scroll position
       const sections = navLinks.map(link => link.href.slice(1));
       for (const section of sections.reverse()) {
         const element = document.getElementById(section);
@@ -48,7 +46,6 @@ export const Navbar = () => {
       }`}
     >
       <div className="flex items-center justify-between">
-        {/* Animated Logo */}
         <motion.a
           href="#home"
           className="text-2xl font-black tracking-tight relative group overflow-hidden"
@@ -96,7 +93,6 @@ export const Navbar = () => {
           />
         </motion.a>
 
-        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center">
           <ul className="flex items-center gap-10">
             {navLinks.map((link, index) => {
@@ -130,7 +126,6 @@ export const Navbar = () => {
           </ul>
         </div>
 
-        {/* Mobile Menu Button */}
         <motion.button
           onClick={() => setIsMobileOpen(!isMobileOpen)}
           className="md:hidden text-foreground p-2 relative"
@@ -163,7 +158,6 @@ export const Navbar = () => {
         </motion.button>
       </div>
 
-      {/* Mobile Navigation */}
       <AnimatePresence>
         {isMobileOpen && (
           <motion.div
