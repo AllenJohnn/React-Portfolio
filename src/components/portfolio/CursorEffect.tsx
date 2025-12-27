@@ -19,7 +19,6 @@ export const CursorEffect = () => {
       setMousePosition({ x: e.clientX, y: e.clientY });
       setIsVisible(true);
 
-      // Create trailing particles
       const newParticle: Particle = {
         id: particleId++,
         x: e.clientX,
@@ -43,7 +42,6 @@ export const CursorEffect = () => {
     };
   }, []);
 
-  // Remove particles after animation
   useEffect(() => {
     if (particles.length > 0) {
       const timer = setTimeout(() => {
@@ -53,14 +51,12 @@ export const CursorEffect = () => {
     }
   }, [particles]);
 
-  // Hide on mobile/touch devices
   if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) {
     return null;
   }
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">
-      {/* Main cursor glow */}
       <AnimatePresence>
         {isVisible && (
           <motion.div
@@ -76,7 +72,6 @@ export const CursorEffect = () => {
         )}
       </AnimatePresence>
 
-      {/* Trailing particles */}
       <AnimatePresence>
         {particles.map((particle, index) => (
           <motion.div
@@ -94,7 +89,6 @@ export const CursorEffect = () => {
         ))}
       </AnimatePresence>
 
-      {/* Outer ring */}
       <AnimatePresence>
         {isVisible && (
           <motion.div
