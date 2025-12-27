@@ -5,33 +5,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @layer base {
-  /* Dark theme (default) */
   :root,
   .dark {
     --background: 0 0% 4%;
     --foreground: 0 0% 100%;
-
     --card: 0 0% 6%;
     --card-foreground: 0 0% 100%;
-
     --popover: 0 0% 6%;
     --popover-foreground: 0 0% 100%;
-
     --primary: 239 84% 67%;
     --primary-foreground: 0 0% 100%;
-
     --secondary: 0 0% 10%;
     --secondary-foreground: 0 0% 100%;
-
     --muted: 0 0% 12%;
     --muted-foreground: 0 0% 60%;
-
     --accent: 280 68% 47%;
     --accent-foreground: 0 0% 100%;
-
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
-
     --border: 0 0% 15%;
     --input: 0 0% 15%;
     --ring: 239 84% 67%;
@@ -57,7 +48,7 @@
     --sidebar-ring: 239 84% 67%;
   }
 
-  /* Light theme */
+  
   .light {
     --background: 0 0% 98%;
     --foreground: 0 0% 8%;
@@ -167,13 +158,11 @@
     @apply bg-card/80 backdrop-blur-2xl border border-border;
   }
 
-  /* Scroll progress bar */
   .scroll-progress {
     @apply fixed top-0 left-0 h-[3px] z-50;
     background: var(--gradient-primary);
   }
 
-  /* Skills infinite scroll */
   .skills-track {
     animation: scroll-infinite 25s linear infinite;
   }
@@ -187,7 +176,6 @@
     100% { transform: translateX(-50%); }
   }
 
-  /* Floating background animation */
   .bg-float span {
     position: absolute;
     display: block;
@@ -215,7 +203,6 @@
   .bg-float span:nth-child(7) { left: 70%; animation-delay: 12s; animation-duration: 23s; }
   .bg-float span:nth-child(8) { left: 80%; animation-delay: 14s; animation-duration: 27s; }
 
-  /* Button styles */
   .btn-primary {
     @apply relative overflow-hidden text-white font-semibold px-8 py-4 rounded-xl transition-all duration-300;
     background: var(--gradient-primary);
@@ -238,13 +225,11 @@
     transform: translateY(-3px);
   }
 
-  /* Section title line */
   .section-line {
     @apply w-20 h-1 mx-auto mt-4 rounded-full;
     background: var(--gradient-primary);
   }
 
-  /* Image hover effect */
   .image-hover {
     @apply transition-all duration-500;
     filter: grayscale(20%);
@@ -255,7 +240,6 @@
     filter: grayscale(0%);
   }
 
-  /* Project card */
   .project-card {
     @apply relative overflow-hidden rounded-2xl transition-all duration-500;
     background: rgba(255, 255, 255, 0.02);
@@ -281,7 +265,6 @@
     opacity: 1;
   }
 
-  /* Skill card */
   .skill-card {
     @apply flex flex-col items-center gap-3 p-6 rounded-xl transition-all duration-300 cursor-pointer;
     background: rgba(255, 255, 255, 0.02);
@@ -294,7 +277,6 @@
     transform: translateY(-5px);
   }
 
-  /* Pulse animation for decorative elements */
   @keyframes pulse-border {
     0%, 100% { transform: scale(1); opacity: 1; }
     50% { transform: scale(1.05); opacity: 0.8; }
@@ -304,7 +286,6 @@
     animation: pulse-border 3s ease infinite;
   }
 
-  /* Shimmer effect */
   @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
@@ -321,7 +302,6 @@
     animation: shimmer 3s infinite;
   }
 
-  /* Glow pulse */
   @keyframes glow-pulse {
     0%, 100% { box-shadow: 0 0 20px rgba(102, 126, 234, 0.3); }
     50% { box-shadow: 0 0 40px rgba(102, 126, 234, 0.6); }
@@ -331,7 +311,6 @@
     animation: glow-pulse 2s ease-in-out infinite;
   }
 
-  /* Text shine */
   @keyframes text-shine {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
@@ -352,7 +331,6 @@
     animation: text-shine 3s ease-in-out infinite;
   }
 
-  /* Border glow animation */
   @keyframes border-glow {
     0%, 100% { border-color: rgba(102, 126, 234, 0.2); }
     50% { border-color: rgba(102, 126, 234, 0.6); }
@@ -362,7 +340,6 @@
     animation: border-glow 2s ease-in-out infinite;
   }
 
-  /* Floating animation */
   @keyframes floating {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
@@ -372,7 +349,6 @@
     animation: floating 3s ease-in-out infinite;
   }
 
-  /* Rotate animation */
   @keyframes rotate-slow {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
