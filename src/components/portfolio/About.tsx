@@ -105,7 +105,7 @@ export const About = () => {
             <motion.div variants={itemVariants}>
               <p className="text-muted-foreground leading-relaxed text-lg">
                 <TextReveal 
-                  text="Frontend developer and MCA student skilled in React, Python, HTML, CSS and JavaScript. Focused on building responsive, clean, and user-friendly interfaces with a strong attention to detail."
+                  text="Frontend developer and MCA student skilled in React, Python, HTML, CSS, and JavaScript. Focused on building responsive, clean, and user-friendly interfaces with strong attention to detail. Enthusiastic about PC building and computer hardware."
                   delay={0.3}
                 />
               </p>
