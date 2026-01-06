@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Github, Linkedin, Heart, ArrowUp } from "lucide-react";
+import { Github, Linkedin, ArrowUp } from "lucide-react";
 
 export const Footer = () => {
   const ref = useRef(null);
@@ -16,6 +16,7 @@ export const Footer = () => {
       
       <div className="container mx-auto px-[8%] relative z-10">
         <div className="flex flex-col items-center gap-8">
+          
           <motion.a
             href="#home"
             initial={{ opacity: 0, y: 20 }}
@@ -52,6 +53,7 @@ export const Footer = () => {
             >
               <Github size={20} />
             </motion.a>
+
             <motion.a
               href="https://www.linkedin.com/in/allenjohnjoy/"
               target="_blank"
@@ -80,16 +82,11 @@ export const Footer = () => {
             initial={{ opacity: 0 }}
             animate={isInView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="text-sm text-muted-foreground pt-4 flex items-center gap-2"
+            className="text-sm text-muted-foreground pt-4"
           >
-            © 2025 Allen John. Made with 
-            <motion.span
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1, repeat: Infinity }}
-            >
-              <Heart size={14} className="text-red-500 fill-red-500" />
-            </motion.span>
+            © 2025 Allen John.
           </motion.p>
+
         </div>
       </div>
     </footer>
