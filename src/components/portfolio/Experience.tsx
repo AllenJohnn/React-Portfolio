@@ -19,7 +19,7 @@ const experiences = [
     title: "Bachelor of Computer Applications (BCA)",
     organization: "Sahrdaya College of Advanced Studies Kodakara",
     location: "Kodakara, Kerala",
-    period: "2021 - 2025",
+    period: "2022 - 2025",
     description: "Completed undergraduate degree with specialization in software development and data structures.",
     icon: GraduationCap,
     color: "#764ba2"
