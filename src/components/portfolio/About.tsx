@@ -12,6 +12,7 @@ const interests = [
   { icon: Trophy, label: "Sports" },
 ];
 
+
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -40,14 +41,14 @@ export const About = () => {
   const imageY = useTransform(scrollYProgress, [0, 1], [50, -50]);
 
   return (
-    <section id="about" className="py-24 relative overflow-hidden">
+    <section id="about" className="py-16 md:py-20 lg:py-24 relative overflow-hidden">
       <motion.div
         style={{ y: useTransform(scrollYProgress, [0, 1], [0, -100]) }}
-        className="absolute top-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl"
+        className="absolute top-0 left-0 w-48 h-48 md:w-96 md:h-96 bg-primary/5 rounded-full blur-3xl"
       />
       
-      <div className="container mx-auto px-[8%]" ref={ref}>
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="container mx-auto px-4 md:px-[8%]" ref={ref}>
+        <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
@@ -95,9 +96,9 @@ export const About = () => {
             className="space-y-6"
           >
             <motion.div variants={itemVariants}>
-              <p className="text-primary font-medium text-sm mb-2 tracking-wider">MY INTRODUCTION</p>
+              <p className="text-primary font-medium text-sm mb-2 tracking-wider letter-spacing-animate">MY INTRODUCTION</p>
               <LineReveal>
-                <h2 className="text-4xl md:text-5xl font-bold">About Me</h2>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-wider letter-spacing-animate">About Me</h2>
               </LineReveal>
               <div className="section-line !mx-0 mt-4" />
             </motion.div>
@@ -153,6 +154,7 @@ export const About = () => {
             </motion.div>
 
             <motion.div variants={itemVariants} className="pt-2">
+              <p className="text-sm font-medium text-muted-foreground mb-3">INTERESTS & HOBBIES</p>
               <div className="flex flex-wrap gap-3">
                 {interests.map((interest, index) => (
                   <motion.div

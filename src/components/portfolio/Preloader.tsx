@@ -26,78 +26,43 @@ export const Preloader = () => {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
           className="fixed inset-0 z-[10000] bg-background flex flex-col items-center justify-center"
         >
+          {/* Logo */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="relative mb-8"
+            className="mb-16"
           >
-            <motion.h1
-              className="text-5xl md:text-7xl font-black tracking-tight"
-              animate={{
-                backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-              style={{
-                background: "linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)), hsl(var(--primary)))",
-                backgroundSize: "200% 200%",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
-              }}
-            >
-              ALLEN
-              <motion.span
-                animate={{ opacity: [1, 0.3, 1] }}
-                transition={{ duration: 1, repeat: Infinity }}
-              >
-                .
-              </motion.span>
-              DEV
-            </motion.h1>
+            <h1 className="text-4xl md:text-5xl font-black tracking-wider bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">
+              ALLEN.DEV
+            </h1>
           </motion.div>
 
-          <div className="w-48 h-1 bg-border rounded-full overflow-hidden">
-            <motion.div
-              className="h-full bg-gradient-primary rounded-full"
-              initial={{ width: 0 }}
-              animate={{ width: `${Math.min(progress, 100)}%` }}
-              transition={{ duration: 0.2 }}
-            />
-          </div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="mt-4 text-sm text-muted-foreground"
-          >
-            Loading experience...
-          </motion.p>
-
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {[...Array(5)].map((_, i) => (
+          {/* Progress bar */}
+          <div className="w-64">
+            <div className="flex justify-between items-center mb-3">
+              <span className="text-xs text-muted-foreground">Loading</span>
+              <motion.span
+                key={Math.floor(progress)}
+                initial={{ scale: 1.2 }}
+                animate={{ scale: 1 }}
+                className="text-xs font-semibold text-purple-400"
+              >
+                {Math.floor(progress)}%
+              </motion.span>
+            </div>
+            
+            <div className="h-1 bg-border rounded-full overflow-hidden">
               <motion.div
-                key={i}
-                className="absolute w-32 h-32 rounded-full bg-primary/5 blur-xl"
-                initial={{
-                  x: Math.random() * window.innerWidth,
-                  y: Math.random() * window.innerHeight,
-                }}
-                animate={{
-                  x: [null, Math.random() * window.innerWidth],
-                  y: [null, Math.random() * window.innerHeight],
-                }}
-                transition={{
-                  duration: 10 + Math.random() * 5,
-                  repeat: Infinity,
-                  repeatType: "reverse",
-                }}
+                className="h-full bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${Math.min(progress, 100)}%` }}
+                transition={{ duration: 0.2 }}
               />
-            ))}
+            </div>
           </div>
         </motion.div>
       )}

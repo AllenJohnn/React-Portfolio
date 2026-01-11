@@ -5,6 +5,7 @@ import { Menu, X } from "lucide-react";
 const navLinks = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About" },
+  { href: "#experience", label: "Experience" },
   { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
   { href: "#contact", label: "Contact" },
@@ -41,14 +42,14 @@ export const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 z-50 px-[8%] py-6 transition-all duration-300 ${
-        isScrolled ? "py-4 bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-lg" : ""
+      className={`fixed top-0 left-0 right-0 z-50 px-4 md:px-[8%] py-6 transition-all duration-300 ${
+        isScrolled ? "py-3 md:py-4 bg-background/95 backdrop-blur-xl border-b border-border/50 shadow-lg" : ""
       }`}
     >
       <div className="flex items-center justify-between">
         <motion.a
           href="#home"
-          className="text-2xl font-black tracking-tight relative group overflow-hidden"
+          className="text-xl md:text-2xl font-black tracking-tight relative group overflow-hidden"
           whileHover="hover"
         >
           <motion.span
@@ -111,6 +112,13 @@ export const Navbar = () => {
                       isActive ? "text-primary" : "text-muted-foreground hover:text-foreground"
                     }`}
                   >
+                    {isActive && (
+                      <motion.div
+                        layoutId="activeIndicator"
+                        className="absolute -inset-2 rounded-lg bg-primary/10 -z-10"
+                        transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                      />
+                    )}
                     <span className="relative z-10">{link.label}</span>
                     <motion.span 
                       className="absolute bottom-0 left-0 h-[2px] bg-gradient-primary"
@@ -165,7 +173,7 @@ export const Navbar = () => {
             animate={{ opacity: 1, height: "auto", y: 0 }}
             exit={{ opacity: 0, height: 0, y: -20 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="md:hidden mt-6 glass rounded-xl overflow-hidden"
+            className="md:hidden mt-6 glass rounded-xl overflow-hidden backdrop-blur-smooth"
           >
             <ul className="py-6 px-6 space-y-1">
               {navLinks.map((link, index) => {

@@ -33,8 +33,8 @@ export const Hero = () => {
         className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-bl from-primary/[0.08] via-accent/[0.05] to-transparent rounded-bl-[50%] z-0" 
       />
       
-      <motion.div style={{ y, opacity, scale }} className="relative z-10 container mx-auto px-[8%] pt-32 pb-24">
-        <div className="flex flex-wrap justify-between items-center gap-12">
+      <motion.div style={{ y, opacity, scale }} className="relative z-10 container mx-auto px-4 md:px-[8%] pt-24 md:pt-32 pb-20 md:pb-24">
+        <div className="flex flex-col lg:flex-row flex-wrap justify-between items-center gap-8 md:gap-12">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -55,7 +55,7 @@ export const Hero = () => {
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3, ease: [0.33, 1, 0.68, 1] }}
-                className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight"
+                className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-wider letter-spacing-animate"
               >
                 <span className="text-gradient">Allen John</span>
               </motion.h1>
@@ -76,7 +76,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.7 }}
-              className="text-lg text-muted-foreground mb-10 max-w-[520px] leading-relaxed"
+              className="text-lg text-muted-foreground mb-8 max-w-[520px] leading-relaxed"
             >
               Developing sleek, responsive web experiences driven by clean code and smart engineering.
             </motion.p>
@@ -146,7 +146,7 @@ export const Hero = () => {
                 alt="Allen John"
                 whileHover={{ scale: 1.03 }}
                 transition={{ duration: 0.4 }}
-                className="relative z-10 w-[350px] h-[350px] md:w-[400px] md:h-[400px] object-cover rounded-2xl"
+                className="relative z-10 w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] object-cover rounded-2xl"
                 style={{ boxShadow: "0 25px 70px rgba(0, 0, 0, 0.6)" }}
               />
 
@@ -159,14 +159,20 @@ export const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer group"
         >
           <span className="text-sm font-medium">Scroll Down</span>
           <motion.div
+            className="relative"
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
           >
-            <ChevronDown size={24} />
+            <motion.div 
+              className="absolute inset-0 rounded-full bg-primary/30 blur-md"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+            <ChevronDown size={24} className="relative" />
           </motion.div>
         </motion.button>
       </motion.div>
