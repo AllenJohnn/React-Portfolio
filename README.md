@@ -7,7 +7,7 @@ https://allenjohn-portfolio.vercel.app/
 
 ---
 
-## ⭐ Features
+##  Features
 
 - Responsive and modern UI  
 - Smooth scroll animations  
@@ -17,7 +17,7 @@ https://allenjohn-portfolio.vercel.app/
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Technology | Purpose |
 |-----------|----------|
@@ -28,7 +28,7 @@ https://allenjohn-portfolio.vercel.app/
 | **React Icons** | Icons used across UI |
 ---
 
-## 📌 Sections Overview
+##  Sections Overview
 
 | Section | Description |
 |--------|-------------|

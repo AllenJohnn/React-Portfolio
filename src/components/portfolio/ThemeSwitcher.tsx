@@ -58,7 +58,6 @@ export const ThemeSwitcher = () => {
   const applyTheme = (newTheme: Theme, newColorScheme: ColorScheme) => {
     const root = document.documentElement;
     
-    // Apply theme
     if (newTheme === "light") {
       root.style.setProperty("--background", "0 0% 98%");
       root.style.setProperty("--foreground", "0 0% 10%");
@@ -75,7 +74,7 @@ export const ThemeSwitcher = () => {
       root.style.setProperty("--border", "0 0% 15%");
     }
     
-    // Apply color scheme
+
     const scheme = colorSchemes[newColorScheme];
     root.style.setProperty("--primary", scheme.primary);
     root.style.setProperty("--accent", scheme.accent);

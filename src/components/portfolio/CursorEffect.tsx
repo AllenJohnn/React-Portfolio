@@ -11,11 +11,21 @@ export const CursorEffect = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState<Particle[]>([]);
   const [isVisible, setIsVisible] = useState(false);
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   const particleId = useRef(0);
   const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
+    const checkTouch = () => {
+      setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    checkTouch();
+  }, []);
+
+  useEffect(() => {
+    if (isTouchDevice) return;
+
     const handleMouseMove = (e: MouseEvent) => {
       // Throttle position updates (smoother)
       if (!rafRef.current) {
@@ -45,14 +55,14 @@ export const CursorEffect = () => {
     document.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
+      if (isTouchDevice) return;
       window.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [isTouchDevice]);
 
-  // Cleanup particles naturally
   useEffect(() => {
     if (particles.length > 0) {
       const timer = setTimeout(() => {
@@ -62,13 +72,7 @@ export const CursorEffect = () => {
     }
   }, [particles]);
 
-  // Disable on touch devices
-  if (
-    typeof window !== "undefined" &&
-    window.matchMedia("(pointer: coarse)").matches
-  ) {
-    return null;
-  }
+  if (isTouchDevice) return null;
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">

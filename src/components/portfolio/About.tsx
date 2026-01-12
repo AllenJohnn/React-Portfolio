@@ -4,6 +4,7 @@ import { Mail, Phone, Linkedin, Github, Music, Plane, Film, Trophy } from "lucid
 import allenPic from "@/assets/allen-pic.jpg";
 import { TextReveal, LineReveal } from "./TextReveal";
 import { TiltCard } from "./TiltCard";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const interests = [
   { icon: Music, label: "Music" },
@@ -32,6 +33,8 @@ const itemVariants = {
 export const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const imageAnimation = useScrollAnimation({ delay: 200, animationClass: 'animate__fadeInLeft' });
+  const textAnimation = useScrollAnimation({ delay: 400, animationClass: 'animate__fadeInRight' });
   
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -49,52 +52,49 @@ export const About = () => {
       
       <div className="container mx-auto px-4 md:px-[8%]" ref={ref}>
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8 }}
-            className="relative flex justify-center lg:justify-start"
-          >
-            <TiltCard intensity={10}>
-              <motion.div style={{ y: imageY }} className="relative">
-                <motion.div 
-                  animate={{ rotate: [0, 2, 0, -2, 0] }}
-                  transition={{ duration: 10, repeat: Infinity }}
-                  className="absolute -inset-4 border-2 border-primary/20 rounded-2xl" 
-                />
-                <motion.div 
-                  animate={{ rotate: [0, -2, 0, 2, 0] }}
-                  transition={{ duration: 12, repeat: Infinity }}
-                  className="absolute -inset-8 border-2 border-accent/10 rounded-2xl" 
-                />
-                
-                <motion.img
-                  src={allenPic}
-                  alt="Allen John Joy"
-                  className="relative w-full max-w-[400px] aspect-square object-cover rounded-2xl"
-                  style={{ boxShadow: "0 25px 70px rgba(0, 0, 0, 0.5)" }}
-                />
+          <div ref={imageAnimation.ref} className={imageAnimation.animationClass}>
+            <motion.div
+              className="relative flex justify-center lg:justify-start"
+            >
+              <TiltCard intensity={10}>
+                <motion.div style={{ y: imageY }} className="relative">
+                  <motion.div 
+                    animate={{ rotate: [0, 1, 0, -1, 0] }}
+                    transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute -inset-4 border border-primary/15 rounded-2xl" 
+                  />
+                  
+                  <motion.img
+                    src={allenPic}
+                    alt="Allen John Joy"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                    className="relative w-full max-w-[400px] aspect-square object-cover rounded-2xl"
+                    style={{ boxShadow: "0 25px 70px rgba(0, 0, 0, 0.5)" }}
+                  />
 
-                <motion.div
-                  initial={{ opacity: 0, scale: 0, rotate: -10 }}
-                  animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
-                  transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  className="absolute -bottom-6 -right-6 w-28 h-28 rounded-xl bg-gradient-primary flex flex-col items-center justify-center glow-primary cursor-default"
-                >
-                  <span className="text-2xl font-bold text-white">MCA</span>
-                  <span className="text-xs text-white/80">Student</span>
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0, rotate: -10 }}
+                    animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
+                    transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
+                    whileHover={{ scale: 1.15, rotate: 5 }}
+                    className="absolute -bottom-6 -right-6 w-28 h-28 rounded-xl bg-gradient-primary flex flex-col items-center justify-center glow-primary cursor-default"
+                  >
+                    <span className="text-2xl font-bold text-white">MCA</span>
+                    <span className="text-xs text-white/80">Student</span>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            </TiltCard>
-          </motion.div>
+              </TiltCard>
+            </motion.div>
+          </div>
 
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate={isInView ? "visible" : "hidden"}
-            className="space-y-6"
-          >
+          <div ref={textAnimation.ref} className={textAnimation.animationClass}>
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate={isInView ? "visible" : "hidden"}
+              className="space-y-6"
+            >
             <motion.div variants={itemVariants}>
               <p className="text-primary font-medium text-sm mb-2 tracking-wider letter-spacing-animate">MY INTRODUCTION</p>
               <LineReveal>
@@ -178,8 +178,9 @@ export const About = () => {
                   </motion.div>
                 ))}
               </div>
+              </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

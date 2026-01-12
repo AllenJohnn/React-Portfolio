@@ -12,7 +12,6 @@ import { SectionDivider } from "@/components/portfolio/SectionDivider";
 import { Preloader } from "@/components/portfolio/Preloader";
 import { CursorEffect } from "@/components/portfolio/CursorEffect";
 import { ThemeSwitcher } from "@/components/portfolio/ThemeSwitcher";
-import { ThreeBackground } from "@/components/portfolio/ThreeBackground";
 import { SEO } from "@/components/SEO";
 import { Suspense } from "react";
 
@@ -26,7 +25,6 @@ const Index = () => {
       <SEO />
       <Preloader />
       <CursorEffect />
-      <ThreeBackground />
       <ThemeSwitcher />
       <main className="relative min-h-screen overflow-x-hidden">
         <ScrollProgress />
@@ -34,17 +32,17 @@ const Index = () => {
         <ScrollToTop />
         
         <Hero />
-        <SectionDivider variant="dots" />
+        <SectionDivider />
         <About />
-        <SectionDivider variant="gradient" />
+        <SectionDivider />
         <Experience />
-        <SectionDivider variant="wave" />
+        <SectionDivider />
         <SkillsEnhanced />
-        <SectionDivider variant="dots" />
+        <SectionDivider />
         <Suspense fallback={<SectionLoader />}>
           <ProjectsEnhanced />
         </Suspense>
-        <SectionDivider variant="wave" />
+        <SectionDivider />
         <Suspense fallback={<SectionLoader />}>
           <ContactEnhanced />
         </Suspense>

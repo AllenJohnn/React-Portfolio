@@ -12,8 +12,8 @@ export const SEO = ({
   title = "Allen John | Frontend Developer & MCA Student",
   description = "Portfolio of Allen John - Frontend Developer specializing in React, TypeScript, and modern web technologies. MCA student passionate about creating beautiful, responsive web experiences.",
   keywords = "Allen John, Frontend Developer, React Developer, Web Developer, Portfolio, MCA Student, TypeScript, JavaScript, UI/UX",
-  ogImage = "/og-image.png",
-  url = "https://allenjohn.dev"
+  ogImage = "https://allenjohnjoy.vercel.app/og-image.png",
+  url = "https://allenjohnjoy.vercel.app"
 }: SEOProps) => {
   return (
     <Helmet>
@@ -38,6 +38,7 @@ export const SEO = ({
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content={url} />
       <meta property="twitter:title" content={title} />
+      <meta property="twitter:creator" content="@allenjohnjoy" />
       <meta property="twitter:description" content={description} />
       <meta property="twitter:image" content={ogImage} />
 

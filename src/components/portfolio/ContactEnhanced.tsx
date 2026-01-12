@@ -49,7 +49,6 @@ export const ContactEnhanced = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     
-    // Clear error for this field
     if (errors[name as keyof FormErrors]) {
       setErrors({ ...errors, [name]: undefined });
     }
@@ -122,11 +121,17 @@ export const ContactEnhanced = () => {
     }
 
     setIsSubmitting(true);
-    
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const text = `Hello! I'm ${formData.name}.%0A%0A${formData.message}%0A%0AEmail: ${formData.email}`;
+    
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'whatsapp_contact', {
+        event_category: 'engagement',
+        event_label: 'WhatsApp Contact'
+      });
+    }
+    
     window.open(`https://wa.me/916282091469?text=${text}`, "_blank");
     
     setIsSubmitting(false);
@@ -148,8 +153,6 @@ export const ContactEnhanced = () => {
     }
 
     setIsSubmitting(true);
-    
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
@@ -158,7 +161,22 @@ export const ContactEnhanced = () => {
     
     setIsSubmitting(false);
     setIsSubmitted(true);
-    toast.success("Message sent successfully!");
+    
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'contact_form_submit', {
+        event_category: 'engagement',
+        event_label: 'Email Contact'
+      });
+    }
+    
+    toast.success("Message sent successfully!", {
+      duration: 4000,
+      style: {
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: '#fff',
+        fontWeight: '600',
+      },
+    });
     
     setTimeout(() => {
       setFormData({ name: "", email: "", message: "" });

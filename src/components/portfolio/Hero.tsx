@@ -4,6 +4,7 @@ import profileImg from "@/assets/profile.jpg";
 import { TypeWriter } from "./TypeWriter";
 import { MagneticButton } from "./MagneticButton";
 import { ParallaxBackground } from "./ParallaxSection";
+import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 
 const roles = ["Frontend Developer", "MCA Student", "React Enthusiast", "UI Designer"];
 
@@ -21,9 +22,8 @@ export const Hero = () => {
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
       <ParallaxBackground />
 
-      <div className="bg-float fixed inset-0 z-0 opacity-[0.03] pointer-events-none">
-        <span></span><span></span><span></span><span></span>
-        <span></span><span></span><span></span><span></span>
+      <div className="bg-float fixed inset-0 z-0 opacity-[0.02] pointer-events-none">
+        <span></span><span></span><span></span>
       </div>
 
       <motion.div 
@@ -44,17 +44,17 @@ export const Hero = () => {
             <motion.p
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
               className="text-primary font-medium mb-4 tracking-wider"
             >
-              👋 Hello, my name is
+              Hello, my name is
             </motion.p>
 
             <div className="overflow-hidden mb-2">
               <motion.h1
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.8, delay: 0.3, ease: [0.33, 1, 0.68, 1] }}
+                transition={{ duration: 0.7, delay: 0.2, ease: [0.33, 1, 0.68, 1] }}
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-wider letter-spacing-animate"
               >
                 <span className="text-gradient">Allen John</span>
@@ -65,7 +65,7 @@ export const Hero = () => {
               <motion.div
                 initial={{ y: "100%" }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.8, delay: 0.5, ease: [0.33, 1, 0.68, 1] }}
+                transition={{ duration: 0.7, delay: 0.35, ease: [0.33, 1, 0.68, 1] }}
                 className="text-2xl md:text-3xl lg:text-4xl font-bold text-muted-foreground"
               >
                 I'm a <TypeWriter words={roles} />
@@ -75,7 +75,7 @@ export const Hero = () => {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.7 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
               className="text-lg text-muted-foreground mb-8 max-w-[520px] leading-relaxed"
             >
               Developing sleek, responsive web experiences driven by clean code and smart engineering.
@@ -84,7 +84,7 @@ export const Hero = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.9 }}
+              transition={{ duration: 0.5, delay: 0.65 }}
               className="flex flex-wrap gap-4"
             >
               <MagneticButton>
@@ -105,6 +105,14 @@ export const Hero = () => {
                 <motion.a
                   href="/Allen-John-Joy-CV.pdf"
                   download
+                  onClick={() => {
+                    if (typeof window !== 'undefined' && (window as any).gtag) {
+                      (window as any).gtag('event', 'resume_download', {
+                        event_category: 'engagement',
+                        event_label: 'CV Download from Hero'
+                      });
+                    }
+                  }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="btn-outline flex items-center gap-3"
@@ -161,18 +169,26 @@ export const Hero = () => {
           transition={{ delay: 1.5, duration: 0.6 }}
           className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer group"
         >
-          <span className="text-sm font-medium">Scroll Down</span>
+          <span className="text-sm font-medium animate__animated animate__fadeIn animate__delay-2s">Scroll Down</span>
           <motion.div
-            className="relative"
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
+            className="relative scroll-wheel-indicator"
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           >
             <motion.div 
               className="absolute inset-0 rounded-full bg-primary/30 blur-md"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+              animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 2, repeat: Infinity }}
             />
-            <ChevronDown size={24} className="relative" />
+            <motion.div
+              animate={{ 
+                y: [0, 5, 0],
+                rotate: [0, 10, 0, -10, 0]
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <ChevronDown size={28} className="relative drop-shadow-lg" />
+            </motion.div>
           </motion.div>
         </motion.button>
       </motion.div>

@@ -143,13 +143,10 @@ export const Footer = () => {
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-col md:flex-row md:items-center md:justify-between gap-4"
+          className="flex flex-col items-center gap-4 text-center"
         >
-          <p className="text-xs text-muted-foreground text-center md:text-left">
-            © {new Date().getFullYear()} Allen John. 
-          </p>
-          <p className="text-xs text-muted-foreground text-center">
-            Built with React, TypeScript, Tailwind CSS & Framer Motion
+          <p className="text-sm md:text-base font-medium text-foreground">
+            © 2026 Allen John
           </p>
           
           {/* Back to Top Button */}
@@ -160,7 +157,7 @@ export const Footer = () => {
             onClick={scrollToTop}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
-            className="w-10 h-10 rounded-lg border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary hover:bg-primary/10 transition-all mx-auto md:mx-0"
+            className="w-10 h-10 rounded-lg border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary hover:bg-primary/10 transition-all"
             aria-label="Back to top"
           >
             <motion.div
