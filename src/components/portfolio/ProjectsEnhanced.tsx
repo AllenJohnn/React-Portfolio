@@ -20,6 +20,8 @@ import fakenewsImg from "@/assets/projects/fakenews.png";
 import speedtestImg from "@/assets/projects/speedtest.png";
 import qrImg from "@/assets/projects/qrtools.png";
 import tabMemoryImg from "@/assets/projects/browser.png";
+import pdftoolImg from "@/assets/projects/pdftool.png";
+import resumeImg from "@/assets/projects/resume.png";
 
 const projects = [
   {
@@ -33,6 +35,16 @@ const projects = [
     color: "#1DB954",
   },
   {
+    title: "PDF Tools Pro",
+    description: "Local-first PDF toolkit with merge, split, compress, convert, and metadata tools—no uploads, no APIs.",
+    fullDescription: "A complete PDF workstation built with TypeScript and Node.js. Merge, split by ranges, compress, inspect metadata, convert PDFs to images or text, and turn images back into PDFs—all processed locally for privacy.",
+    tech: ["TypeScript", "Node.js", "Express"],
+    category: "Tool",
+    github: "https://github.com/AllenJohnn/PDF-Tools",
+    image: pdftoolImg,
+    color: "#f97316",
+  },
+  {
     title: "QuickBench",
     description: "A modern cognitive performance app featuring real-time aim training, reaction-time benchmarking, and a clean typing speed test.",
     fullDescription: "QuickBench is your ultimate performance testing suite. Train your reflexes with the aim trainer, test your reaction speed with precision timing, and improve your typing with detailed WPM analytics. Features real-time performance tracking, historical data visualization, leaderboards, and personalized improvement suggestions.",
@@ -42,6 +54,17 @@ const projects = [
     live: "https://playquickbench.vercel.app/",
     image: speedtestImg,
     color: "#667eea",
+  },
+  {
+    title: "Resume Builder",
+    description: "ATS-optimized resume builder with multi-format export and live template preview.",
+    fullDescription: "Professional resume builder focused on ATS alignment. Export to PDF, DOCX, HTML, TXT, or JSON, auto-save progress, analyze ATS readiness, and browse responsive, minimalist templates.",
+    tech: ["React", "TypeScript", "Tailwind CSS"],
+    category: "Web App",
+    github: "https://github.com/AllenJohnn",
+    live: "https://buildresumeee.vercel.app/",
+    image: resumeImg,
+    color: "#10b981",
   },
   {
     title: "QuickQR Tools",
