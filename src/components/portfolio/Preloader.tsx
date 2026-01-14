@@ -14,12 +14,10 @@ export const Preloader = () => {
   const [messageIndex, setMessageIndex] = useState(0);
 
   useEffect(() => {
-    // Rotate loading messages
     const messageInterval = setInterval(() => {
       setMessageIndex((prev) => (prev + 1) % loadingMessages.length);
     }, 1500);
 
-    // Smooth progress animation
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -27,7 +25,6 @@ export const Preloader = () => {
           setTimeout(() => setIsLoading(false), 500);
           return 100;
         }
-        // Smoother increment for more realistic feel
         const increment = prev < 50 ? Math.random() * 15 : Math.random() * 8;
         return Math.min(prev + increment, 100);
       });
@@ -48,7 +45,6 @@ export const Preloader = () => {
           transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
           className="fixed inset-0 z-[10000] bg-background flex flex-col items-center justify-center overflow-hidden"
         >
-          {/* Animated background particles */}
           <div className="absolute inset-0 overflow-hidden">
             {[...Array(20)].map((_, i) => (
               <motion.div
@@ -71,7 +67,7 @@ export const Preloader = () => {
             ))}
           </div>
 
-          {/* Logo with glow effect */}
+
           <motion.div
             initial={{ opacity: 0, y: -30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -94,7 +90,6 @@ export const Preloader = () => {
             </h1>
           </motion.div>
 
-          {/* Loading message */}
           <AnimatePresence mode="wait">
             <motion.p
               key={messageIndex}
@@ -108,7 +103,6 @@ export const Preloader = () => {
             </motion.p>
           </AnimatePresence>
 
-          {/* Enhanced progress bar */}
           <div className="w-80">
             <div className="flex justify-between items-center mb-3">
               <motion.div

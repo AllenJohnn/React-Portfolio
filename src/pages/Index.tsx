@@ -1,6 +1,7 @@
 import { Navbar } from "@/components/portfolio/Navbar";
 import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
 import { ScrollToTop } from "@/components/portfolio/ScrollToTop";
+import { ScrollIndicator } from "@/components/portfolio/ScrollIndicator";
 import { Hero } from "@/components/portfolio/Hero";
 import { About } from "@/components/portfolio/About";
 import { SkillsEnhanced } from "@/components/portfolio/SkillsEnhanced";
@@ -28,6 +29,7 @@ const Index = () => {
       <ThemeSwitcher />
       <main className="relative min-h-screen overflow-x-hidden">
         <ScrollProgress />
+        <ScrollIndicator />
         <Navbar />
         <ScrollToTop />
         

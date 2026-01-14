@@ -27,7 +27,6 @@ export const CursorEffect = () => {
     if (isTouchDevice) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Throttle position updates (smoother)
       if (!rafRef.current) {
         rafRef.current = requestAnimationFrame(() => {
           setMousePosition({ x: e.clientX, y: e.clientY });
@@ -76,7 +75,6 @@ export const CursorEffect = () => {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-[9999]">
-      {/* Glow */}
       <AnimatePresence>
         {isVisible && (
           <motion.div
