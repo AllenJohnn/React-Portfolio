@@ -56,12 +56,8 @@ export const Navbar = () => {
       }`}
     >
       <div className="flex items-center justify-between">
-        <Link
-          to="home"
-          spy={true}
-          smooth={true}
-          offset={-70}
-          duration={1200}
+        <div
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
           className="text-xl md:text-2xl font-black tracking-tight relative group overflow-hidden cursor-pointer"
         >
         <motion.div whileHover="hover">
@@ -106,7 +102,7 @@ export const Navbar = () => {
             transition={{ duration: 0.3 }}
           />
         </motion.div>
-        </Link>
+        </div>
 
         <div className="hidden md:flex items-center">
           <ul className="flex items-center gap-10">

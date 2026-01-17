@@ -78,10 +78,10 @@ export const About = () => {
                     animate={isInView ? { opacity: 1, scale: 1, rotate: 0 } : {}}
                     transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
                     whileHover={{ scale: 1.15, rotate: 5 }}
-                    className="absolute -bottom-6 -right-6 w-28 h-28 rounded-xl bg-gradient-primary flex flex-col items-center justify-center glow-primary cursor-default"
+                    className="absolute -bottom-6 -right-6 w-28 h-28 rounded-xl bg-foreground flex flex-col items-center justify-center shadow-2xl cursor-default"
                   >
-                    <span className="text-2xl font-bold text-white">MCA</span>
-                    <span className="text-xs text-white/80">Student</span>
+                    <span className="text-2xl font-bold text-background">MCA</span>
+                    <span className="text-xs text-background/80">Student</span>
                   </motion.div>
                 </motion.div>
               </TiltCard>

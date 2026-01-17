@@ -43,7 +43,7 @@ export const SEO = ({
       <meta property="twitter:image" content={ogImage} />
 
       {/* Additional Meta Tags */}
-      <meta name="theme-color" content="#667eea" />
+      <meta name="theme-color" content="#0a0a0a" />
       <link rel="canonical" href={url} />
     </Helmet>
   );

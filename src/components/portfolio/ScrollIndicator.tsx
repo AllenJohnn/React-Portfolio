@@ -75,8 +75,8 @@ export const ScrollIndicator = () => {
                   activeSection === section.id
                     ? {
                         boxShadow: [
-                          "0 0 0 0 rgba(168, 85, 247, 0.4)",
-                          "0 0 0 8px rgba(168, 85, 247, 0)",
+                          "0 0 0 0 rgba(255, 255, 255, 0.3)",
+                          "0 0 0 8px rgba(255, 255, 255, 0)",
                         ],
                       }
                     : {}

@@ -131,10 +131,6 @@ const ProjectCard = ({ project, onClick }: { project: typeof projects[0], onClic
         <motion.div
           whileHover={{ y: -8, scale: 1.02 }}
           className="bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col cursor-pointer relative"
-          style={{ 
-            boxShadow: isHovered ? `0 25px 50px ${project.color}30` : undefined,
-            transition: 'box-shadow 0.5s ease, transform 0.3s ease'
-          }}
           onClick={onClick}
         >
           <div className="relative overflow-hidden group">
@@ -153,10 +149,7 @@ const ProjectCard = ({ project, onClick }: { project: typeof projects[0], onClic
               initial={{ opacity: 0 }}
               animate={{ opacity: isHovered ? 1 : 0 }}
               transition={{ duration: 0.4 }}
-              className="absolute inset-0"
-              style={{
-                background: `linear-gradient(135deg, ${project.color}40, transparent 70%)`
-              }}
+              className="absolute inset-0 bg-foreground/10"
             />
             
             <motion.div
@@ -207,8 +200,7 @@ const ProjectCard = ({ project, onClick }: { project: typeof projects[0], onClic
               <h3 className="text-xl font-bold">{project.title}</h3>
               <motion.div 
                 whileHover={{ scale: 1.1 }}
-                className="px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-lg"
-                style={{ background: `linear-gradient(135deg, ${project.color}, ${project.color}dd)` }}
+                className="px-3 py-1.5 rounded-full text-xs font-bold bg-foreground text-background shadow-lg"
               >
                 {project.category}
               </motion.div>
@@ -240,10 +232,7 @@ const ProjectCard = ({ project, onClick }: { project: typeof projects[0], onClic
                     onClick={(e) => e.stopPropagation()}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300"
-                    style={{ 
-                      background: `linear-gradient(135deg, ${project.color}, ${project.color}dd)`,
-                    }}
+                    className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-foreground text-background font-medium shadow-lg hover:shadow-xl transition-all duration-300"
                   >
                     <ArrowUpRight size={16} />
                     <span className="text-sm">Live Demo</span>

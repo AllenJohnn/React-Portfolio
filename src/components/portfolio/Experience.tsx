@@ -75,13 +75,9 @@ const TimelineItem = ({ experience, index }: { experience: typeof experiences[0]
           initial={{ scale: 0 }}
           animate={isInView ? { scale: 1 } : {}}
           transition={{ duration: 0.4, delay: index * 0.1 + 0.2 }}
-          className="w-16 h-16 rounded-full flex items-center justify-center relative z-10"
-          style={{ 
-            background: `linear-gradient(135deg, ${experience.color}, ${experience.color}dd)`,
-            boxShadow: `0 0 30px ${experience.color}60`
-          }}
+          className="w-16 h-16 rounded-full flex items-center justify-center relative z-10 bg-foreground shadow-2xl"
         >
-          <Icon className="w-8 h-8 text-white" />
+          <Icon className="w-8 h-8 text-background" />
         </motion.div>
         
         {index < experiences.length - 1 && (
@@ -193,13 +189,9 @@ export const Experience = () => {
                     <div className="flex items-center justify-center mb-6">
                       <motion.div
                         whileHover={{ scale: 1.1, rotate: 5 }}
-                        className="w-20 h-20 rounded-full flex items-center justify-center"
-                        style={{ 
-                          background: `linear-gradient(135deg, ${experience.color}, ${experience.color}dd)`,
-                          boxShadow: `0 0 30px ${experience.color}60`
-                        }}
+                        className="w-20 h-20 rounded-full flex items-center justify-center bg-foreground shadow-2xl"
                       >
-                        <Icon className="w-10 h-10 text-white" />
+                        <Icon className="w-10 h-10 text-background" />
                       </motion.div>
                     </div>
                     

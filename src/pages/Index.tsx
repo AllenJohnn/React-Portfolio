@@ -1,6 +1,5 @@
 import { Navbar } from "@/components/portfolio/Navbar";
 import { ScrollProgress } from "@/components/portfolio/ScrollProgress";
-import { ScrollToTop } from "@/components/portfolio/ScrollToTop";
 import { ScrollIndicator } from "@/components/portfolio/ScrollIndicator";
 import { Hero } from "@/components/portfolio/Hero";
 import { About } from "@/components/portfolio/About";
@@ -31,7 +30,6 @@ const Index = () => {
         <ScrollProgress />
         <ScrollIndicator />
         <Navbar />
-        <ScrollToTop />
         
         <Hero />
         <SectionDivider />

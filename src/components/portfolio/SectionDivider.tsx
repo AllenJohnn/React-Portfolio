@@ -34,8 +34,8 @@ export const SectionDivider = ({ variant = "gradient" }: SectionDividerProps) =>
           />
           <defs>
             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#667eea" />
-              <stop offset="100%" stopColor="#764ba2" />
+              <stop offset="0%" stopColor="currentColor" className="text-foreground" />
+              <stop offset="100%" stopColor="currentColor" className="text-muted-foreground" />
             </linearGradient>
           </defs>
         </motion.svg>
