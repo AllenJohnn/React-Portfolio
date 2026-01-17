@@ -35,7 +35,7 @@ const projects = [
     color: "#1DB954",
   },
   {
-    title: "PDF Tools Pro",
+    title: "PDF Tools",
     description: "Local-first PDF toolkit with merge, split, compress, convert, and metadata tools—no uploads, no APIs.",
     fullDescription: "A complete PDF workstation built with TypeScript and Node.js. Merge, split by ranges, compress, inspect metadata, convert PDFs to images or text, and turn images back into PDFs—all processed locally for privacy.",
     tech: ["TypeScript", "Node.js", "Express"],
