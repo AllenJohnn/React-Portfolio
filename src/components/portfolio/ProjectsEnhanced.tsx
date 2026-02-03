@@ -29,7 +29,7 @@ const projects = [
     title: "CineView Hub",
     description: "Netflix-inspired movie & TV discovery platform with infinite scroll, video trailers, and production-ready optimizations.",
     fullDescription: "CineView Hub is a modern entertainment discovery platform featuring auto-rotating hero banners, debounced search, genre exploration, and curated collections. Includes detailed movie/TV pages with trailers, actor profiles, infinite scroll, regional streaming availability, and user reviews. Built with production-grade architecture including Web Vitals monitoring, SEO optimization, error boundaries, request caching, and full TypeScript coverage with comprehensive testing.",
-    tech: ["React", "TypeScript", "TanStack Query", "Tailwind CSS"],
+    tech: ["React", "TypeScript", "TanStack Query"],
     category: "Web App",
     live: "https://cineviewhub.vercel.app/",
     image: cineviewImg,
@@ -234,7 +234,7 @@ const ProjectCard = ({ project, onClick }: { project: typeof projects[0], onClic
 
             {/* Action Buttons - Always at bottom */}
             <div className="mt-auto pt-4 border-t border-border">
-              {project.live ? (
+              {project.live && project.github ? (
                 <div className="grid grid-cols-2 gap-3">
                   <motion.a
                     href={project.live}
@@ -262,6 +262,19 @@ const ProjectCard = ({ project, onClick }: { project: typeof projects[0], onClic
                     <span className="text-sm">GitHub</span>
                   </motion.a>
                 </div>
+              ) : project.live ? (
+                <motion.a
+                  href={project.live}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={(e) => e.stopPropagation()}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-foreground text-background font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+                >
+                  <ArrowUpRight size={16} />
+                  <span className="text-sm">Live Demo</span>
+                </motion.a>
               ) : (
                 <motion.a
                   href={project.github}
