@@ -22,8 +22,19 @@ import qrImg from "@/assets/projects/qrtools.png";
 import tabMemoryImg from "@/assets/projects/browser.png";
 import pdftoolImg from "@/assets/projects/pdftool.png";
 import resumeImg from "@/assets/projects/resume.png";
+import cineviewImg from "@/assets/projects/cineview.png";
 
 const projects = [
+  {
+    title: "CineView Hub",
+    description: "Netflix-inspired movie & TV discovery platform with infinite scroll, video trailers, and production-ready optimizations.",
+    fullDescription: "CineView Hub is a modern entertainment discovery platform featuring auto-rotating hero banners, debounced search, genre exploration, and curated collections. Includes detailed movie/TV pages with trailers, actor profiles, infinite scroll, regional streaming availability, and user reviews. Built with production-grade architecture including Web Vitals monitoring, SEO optimization, error boundaries, request caching, and full TypeScript coverage with comprehensive testing.",
+    tech: ["React", "TypeScript", "TanStack Query", "Tailwind CSS"],
+    category: "Web App",
+    live: "https://cineviewhub.vercel.app/",
+    image: cineviewImg,
+    color: "#e50914",
+  },
   {
     title: "Wrapped Revanced",
     description: "A Spotify Wrapped-style experience powered by React and Python. Visualize your music listening habits with beautiful analytics.",
