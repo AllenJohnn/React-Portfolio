@@ -23,6 +23,7 @@ import tabMemoryImg from "@/assets/projects/browser.png";
 import pdftoolImg from "@/assets/projects/pdftool.png";
 import resumeImg from "@/assets/projects/resume.png";
 import cineviewImg from "@/assets/projects/cineview.png";
+import docshareImg from "@/assets/projects/docshare.png";
 
 const projects = [
   {
@@ -44,6 +45,17 @@ const projects = [
     github: "https://github.com/AllenJohnn/Wrapped-Revanced",
     image: spotifyImg,
     color: "#1DB954",
+  },
+  {
+    title: "DocShare",
+    description: "Room-based private file and text sharing app for fast, secure collaboration with minimal setup.",
+    fullDescription: "DocShare is a browser-first sharing platform that allows users to create or join 4-digit rooms for instant file exchange and real-time text snippet collaboration. Features include file upload, preview, download, bulk ZIP exports, shared text boards, member presence tracking, and protected admin controls. Built with a scalable serverless architecture using Redis-backed state management, optional real-time synchronization, and optimized cloud storage delivery for high performance and reliability.",
+    tech: ["React", "TypeScript", "Redis", "WebSockets"],
+    category: "Web App",
+    live: "https://dsh.vercel.app/",
+    github: "https://github.com/AllenJohnn/DocShare",
+    image: docshareImg,
+    color: "#06b6d4",
   },
   {
     title: "PDF Tools",
