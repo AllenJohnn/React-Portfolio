@@ -56,9 +56,6 @@ export default defineConfig({
             if (id.includes("@radix-ui")) {
               return "radix";
             }
-            if (id.includes("react-slick") || id.includes("slick-carousel")) {
-              return "carousel";
-            }
             if (id.includes("react-hot-toast") || id.includes("sonner")) {
               return "notifications";
             }
