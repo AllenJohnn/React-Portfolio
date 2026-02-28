@@ -22,7 +22,7 @@ export const Dock = ({ children, className, direction = "middle" }: DockProps) =
       onMouseMove={(event) => mouseX.set(event.clientX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        "flex items-end gap-2 rounded-2xl border border-border/70 bg-card/80 px-3 py-2 backdrop-blur-xl shadow-2xl",
+        "flex items-end gap-2 rounded-2xl border border-border/70 bg-card/80 px-3 py-2 backdrop-blur-xl shadow-2xl touch-pan-y",
         direction === "middle" && "justify-center",
         direction === "left" && "justify-start",
         direction === "right" && "justify-end",

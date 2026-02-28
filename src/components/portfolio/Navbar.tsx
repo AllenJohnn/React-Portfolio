@@ -138,7 +138,7 @@ export const Navbar = () => {
 
   return (
     <div className="fixed bottom-5 left-1/2 z-[70] -translate-x-1/2 px-3 md:px-0">
-      <Dock className="max-w-[95vw] overflow-x-auto" direction="middle">
+      <Dock className="max-w-[95vw] overflow-hidden touch-pan-y" direction="middle">
         {Array.from(sectionMap.values()).map((item) => (
           <DockIcon key={item.label}>
             <Tooltip>
