@@ -84,11 +84,43 @@ export const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) =>
       return;
     }
 
-    const unlockScroll = () => {
-      document.documentElement.classList.remove("lenis-stopped");
-      document.body.classList.remove("lenis-stopped");
-      document.documentElement.style.removeProperty("overflow");
-      document.body.style.removeProperty("overflow");
+    const isDialogOpen = () => Boolean(document.querySelector('[role="dialog"][data-state="open"]'));
+
+    const canPageScroll = () => document.documentElement.scrollHeight > window.innerHeight + 2;
+
+    const unlockScroll = (force = false) => {
+      if (!force && isDialogOpen()) {
+        return;
+      }
+
+      const html = document.documentElement;
+      const body = document.body;
+
+      html.classList.remove("lenis-stopped");
+      body.classList.remove("lenis-stopped");
+
+      const htmlOverflow = html.style.overflow;
+      const bodyOverflow = body.style.overflow;
+
+      if (htmlOverflow === "hidden" || htmlOverflow === "clip") {
+        html.style.removeProperty("overflow");
+      }
+
+      if (bodyOverflow === "hidden" || bodyOverflow === "clip") {
+        body.style.removeProperty("overflow");
+      }
+    };
+
+    const healScrollLocks = () => {
+      if (isDialogOpen()) {
+        return;
+      }
+
+      if (!canPageScroll()) {
+        return;
+      }
+
+      unlockScroll(true);
     };
 
     unlockScroll();
@@ -112,8 +144,36 @@ export const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) =>
     frameId = requestAnimationFrame(raf);
 
     const resumeLenis = () => {
-      unlockScroll();
+      healScrollLocks();
       lenis.start();
+    };
+
+    const recoverOnInput = () => {
+      if (isDialogOpen()) {
+        return;
+      }
+
+      healScrollLocks();
+      resumeLenis();
+    };
+
+    const handleScrollKey = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isEditable =
+        !!target &&
+        (target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT" ||
+          target.isContentEditable);
+
+      if (isEditable) {
+        return;
+      }
+
+      const scrollKeys = ["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "];
+      if (scrollKeys.includes(event.key)) {
+        recoverOnInput();
+      }
     };
 
     const handleVisibilityChange = () => {
@@ -122,16 +182,32 @@ export const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) =>
       }
     };
 
+    const lockWatchdogId = window.setInterval(() => {
+      healScrollLocks();
+      lenis.start();
+    }, 1200);
+
     window.addEventListener("pageshow", resumeLenis);
     document.addEventListener("visibilitychange", handleVisibilityChange);
+    window.addEventListener("wheel", recoverOnInput, { passive: true });
+    window.addEventListener("touchmove", recoverOnInput, { passive: true });
+    window.addEventListener("touchstart", recoverOnInput, { passive: true });
+    window.addEventListener("keydown", handleScrollKey, { passive: true });
+    window.addEventListener("resize", healScrollLocks);
 
     return () => {
       cancelAnimationFrame(frameId);
+      window.clearInterval(lockWatchdogId);
       window.removeEventListener("pageshow", resumeLenis);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
+      window.removeEventListener("wheel", recoverOnInput);
+      window.removeEventListener("touchmove", recoverOnInput);
+      window.removeEventListener("touchstart", recoverOnInput);
+      window.removeEventListener("keydown", handleScrollKey);
+      window.removeEventListener("resize", healScrollLocks);
       lenis.destroy();
       lenisRef.current = null;
-      unlockScroll();
+      unlockScroll(true);
     };
   }, []);
 
