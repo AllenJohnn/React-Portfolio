@@ -12,9 +12,7 @@ type Gtag = (command: "event", eventName: string, params?: Record<string, string
 
 export const Hero = () => {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 150]);
-  const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-  const scale = useTransform(scrollY, [0, 300], [1, 0.95]);
+  const y = useTransform(scrollY, [0, 500], [0, 80]);
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
@@ -31,7 +29,7 @@ export const Hero = () => {
         className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-bl from-primary/[0.08] via-accent/[0.05] to-transparent rounded-bl-[50%] z-0" 
       />
       
-      <motion.div style={{ y, opacity, scale }} className="relative z-10 container mx-auto px-4 md:px-[8%] pt-24 md:pt-32 pb-20 md:pb-24">
+      <motion.div style={{ y }} className="relative z-10 container mx-auto px-4 md:px-[8%] pt-24 md:pt-32 pb-20 md:pb-24">
         <div className="flex flex-col lg:flex-row flex-wrap justify-between items-center gap-8 md:gap-12">
           <motion.div
             initial={{ opacity: 0 }}
