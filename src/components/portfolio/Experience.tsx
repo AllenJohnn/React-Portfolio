@@ -1,5 +1,5 @@
 import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { ReactNode, useRef } from "react";
 import { Briefcase, GraduationCap, Award, Calendar } from "lucide-react";
 import { LineReveal } from "./TextReveal";
 import Slider from "react-slick";
@@ -118,7 +118,7 @@ export const Experience = () => {
         }
       }
     ],
-    appendDots: (dots: any) => (
+    appendDots: (dots: ReactNode) => (
       <div style={{ bottom: "-40px" }}>
         <ul className="flex items-center justify-center gap-2"> {dots} </ul>
       </div>
@@ -168,10 +168,13 @@ export const Experience = () => {
         </motion.div>
 
         {/* big screen timeline layout */}
-        <div className="hidden md:block space-y-8 md:space-y-16">
-          {experiences.map((experience, index) => (
-            <TimelineItem key={index} experience={experience} index={index} />
-          ))}
+        <div className="relative hidden md:block">
+          <div className="pointer-events-none absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-border to-transparent opacity-70" />
+          <div className="space-y-8 md:space-y-16">
+            {experiences.map((experience, index) => (
+              <TimelineItem key={index} experience={experience} index={index} />
+            ))}
+          </div>
         </div>
 
         {/* mobile carousel view yooo */}

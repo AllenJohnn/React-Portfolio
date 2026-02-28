@@ -2,6 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Github, Linkedin, Mail, ArrowUp, Code, Zap } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useSmoothScroll } from "@/components/ui/smooth-scroll-provider";
 
 const quickLinks = [
   { href: "#about", label: "About" },
@@ -15,6 +16,7 @@ export const Footer = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const { scrollTo } = useSmoothScroll();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,7 +27,13 @@ export const Footer = () => {
   }, []);
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.history.pushState(null, "", "#home");
+    scrollTo(0);
+  };
+
+  const handleSectionNavigation = (sectionId: string) => {
+    window.history.pushState(null, "", `#${sectionId}`);
+    scrollTo(`#${sectionId}`);
   };
 
   return (
@@ -50,7 +58,14 @@ export const Footer = () => {
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6 }}
           >
-            <a href="#home" className="text-2xl md:text-3xl font-black text-gradient inline-block mb-4">
+            <a
+              href="#home"
+              onClick={(event) => {
+                event.preventDefault();
+                handleSectionNavigation("home");
+              }}
+              className="text-2xl md:text-3xl font-black text-gradient inline-block mb-4"
+            >
               ALLEN.DEV
             </a>
             <p className="text-muted-foreground text-xs md:text-sm leading-relaxed mb-6">
@@ -103,6 +118,10 @@ export const Footer = () => {
                 <li key={link.href}>
                   <motion.a
                     href={link.href}
+                    onClick={(event) => {
+                      event.preventDefault();
+                      handleSectionNavigation(link.href.replace("#", ""));
+                    }}
                     whileHover={{ x: 5 }}
                     className="text-muted-foreground hover:text-primary transition-colors text-sm inline-block"
                   >
@@ -125,6 +144,10 @@ export const Footer = () => {
             </p>
             <motion.a
               href="#contact"
+              onClick={(event) => {
+                event.preventDefault();
+                handleSectionNavigation("contact");
+              }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-white font-medium shadow-lg hover:shadow-xl transition-all"

@@ -1,65 +1,18 @@
 import { motion } from "framer-motion";
-import { Sun, Moon } from "lucide-react";
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-
-type Theme = "dark" | "light";
+import { AnimatedThemeToggler } from "@/components/ui/animated-theme-toggler";
 
 export const ThemeSwitcher = () => {
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme") as Theme;
-    
-    if (savedTheme) {
-      setTheme(savedTheme);
-      applyTheme(savedTheme);
-    } else {
-      applyTheme("dark");
-    }
-  }, []);
-
-  const applyTheme = (newTheme: Theme) => {
-    const root = document.documentElement;
-    
-    // Remove both classes first
-    root.classList.remove("light", "dark");
-    
-    // Add the appropriate class
-    root.classList.add(newTheme);
-  };
-
-  const toggleTheme = () => {
-    const newTheme = theme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
-    localStorage.setItem("theme", newTheme);
-    applyTheme(newTheme);
-  };
-
   return (
-    <div className="fixed bottom-8 right-8 z-[9999]">
+    <div className="fixed top-5 right-5 z-[85]">
       <motion.div
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 1 }}
+        initial={{ scale: 0.92, opacity: 0, y: -8 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.35, ease: "easeOut" }}
+        className="flex items-center justify-center rounded-2xl border border-border/70 bg-card/80 p-1.5 shadow-xl backdrop-blur-xl"
       >
-        <Button
-          onClick={toggleTheme}
-          size="icon"
-          className="h-14 w-14 rounded-full shadow-2xl bg-foreground text-background border-2 border-border hover:scale-110 transition-all duration-300 hover:shadow-[0_0_40px_rgba(255,255,255,0.4)]"
-        >
-          <motion.div
-            initial={false}
-            animate={{ rotate: theme === "dark" ? 0 : 180 }}
-            transition={{ duration: 0.5, type: "spring" }}
-          >
-            {theme === "dark" ? (
-              <Sun className="h-6 w-6" />
-            ) : (
-              <Moon className="h-6 w-6" />
-            )}
-          </motion.div>
-        </Button>
+        <AnimatedThemeToggler
+          className="flex h-10 w-10 items-center justify-center rounded-xl border border-border/80 bg-background p-0 text-foreground transition-all duration-300 hover:scale-105 hover:bg-accent"
+        />
       </motion.div>
     </div>
   );

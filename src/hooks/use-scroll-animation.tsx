@@ -40,39 +40,3 @@ export const useScrollAnimation = (options: UseScrollAnimationOptions = {}) => {
     inView
   };
 };
-
-// Predefined animation configurations
-export const fadeInUp = (delay = 0) => useScrollAnimation({
-  threshold: 0.4,
-  triggerOnce: true,
-  delay,
-  animationClass: 'animate__fadeInUp'
-});
-
-export const fadeInLeft = (delay = 0) => useScrollAnimation({
-  threshold: 0.4,
-  triggerOnce: true,
-  delay,
-  animationClass: 'animate__fadeInLeft'
-});
-
-export const fadeInRight = (delay = 0) => useScrollAnimation({
-  threshold: 0.4,
-  triggerOnce: true,
-  delay,
-  animationClass: 'animate__fadeInRight'
-});
-
-export const zoomIn = (delay = 0) => useScrollAnimation({
-  threshold: 0.4,
-  triggerOnce: true,
-  delay,
-  animationClass: 'animate__zoomIn'
-});
-
-export const bounceIn = (delay = 0) => useScrollAnimation({
-  threshold: 0.4,
-  triggerOnce: true,
-  delay,
-  animationClass: 'animate__bounceIn'
-});

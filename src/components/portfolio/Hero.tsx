@@ -1,22 +1,20 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Github, Download, ChevronDown } from "lucide-react";
+import { Github, Download } from "lucide-react";
 import profileImg from "@/assets/profile.jpg";
 import { TypeWriter } from "./TypeWriter";
 import { MagneticButton } from "./MagneticButton";
 import { ParallaxBackground } from "./ParallaxSection";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { SparklesText } from "@/components/ui/sparkles-text";
+import { AnimatedGradientText } from "@/components/ui/animated-gradient-text";
 
 const roles = ["Frontend Developer", "MCA Student", "React Enthusiast", "UI Designer"];
+type Gtag = (command: "event", eventName: string, params?: Record<string, string>) => void;
 
 export const Hero = () => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 150]);
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
   const scale = useTransform(scrollY, [0, 300], [1, 0.95]);
-
-  const scrollToAbout = () => {
-    document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
-  };
 
   return (
     <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
@@ -47,7 +45,9 @@ export const Hero = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-primary font-medium mb-4 tracking-wider"
             >
-              Hello, my name is
+              <SparklesText>
+                <AnimatedGradientText>Hello, my name is</AnimatedGradientText>
+              </SparklesText>
             </motion.p>
 
             <div className="overflow-hidden mb-2">
@@ -57,7 +57,7 @@ export const Hero = () => {
                 transition={{ duration: 0.7, delay: 0.2, ease: [0.33, 1, 0.68, 1] }}
                 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-wider letter-spacing-animate"
               >
-                <span className="text-gradient">Allen John</span>
+                <span className="inline-block text-foreground">Allen John</span>
               </motion.h1>
             </div>
 
@@ -106,10 +106,11 @@ export const Hero = () => {
                   href="/Allen-John-Joy-CV.pdf"
                   download
                   onClick={() => {
-                    if (typeof window !== 'undefined' && (window as any).gtag) {
-                      (window as any).gtag('event', 'resume_download', {
-                        event_category: 'engagement',
-                        event_label: 'CV Download from Hero'
+                    const gtag = (window as Window & { gtag?: Gtag }).gtag;
+                    if (gtag) {
+                      gtag("event", "resume_download", {
+                        event_category: "engagement",
+                        event_label: "CV Download from Hero"
                       });
                     }
                   }}
@@ -162,35 +163,6 @@ export const Hero = () => {
           </motion.div>
         </div>
 
-        <motion.button
-          onClick={scrollToAbout}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5, duration: 0.6 }}
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground hover:text-primary transition-colors cursor-pointer group"
-        >
-          <span className="text-sm font-medium animate__animated animate__fadeIn animate__delay-2s">Scroll Down</span>
-          <motion.div
-            className="relative scroll-wheel-indicator"
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          >
-            <motion.div 
-              className="absolute inset-0 rounded-full bg-primary/30 blur-md"
-              animate={{ scale: [1, 1.4, 1], opacity: [0.3, 0.6, 0.3] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
-            <motion.div
-              animate={{ 
-                y: [0, 5, 0],
-                rotate: [0, 10, 0, -10, 0]
-              }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            >
-              <ChevronDown size={28} className="relative drop-shadow-lg" />
-            </motion.div>
-          </motion.div>
-        </motion.button>
       </motion.div>
     </section>
   );

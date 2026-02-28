@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { LineReveal } from "./TextReveal";
+import { TextAnimate } from "@/components/ui/text-animate";
 import htmlIcon from "@/assets/skills/html.png";
 import jsIcon from "@/assets/skills/js.png";
 import gitIcon from "@/assets/skills/git.png";
@@ -57,7 +58,11 @@ export const SkillsEnhanced = () => {
           className="text-center mb-14"
         >
           <LineReveal>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground">Tech Stack</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-foreground">
+              <TextAnimate animation="blurInUp" by="character" once>
+                Tech Stack
+              </TextAnimate>
+            </h2>
           </LineReveal>
         </motion.div>
 

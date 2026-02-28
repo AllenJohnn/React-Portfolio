@@ -1,11 +1,22 @@
-import { motion, useInView, AnimatePresence } from "framer-motion";
+import {
+  motion,
+  useInView,
+  AnimatePresence,
+  LayoutGroup,
+  Variants,
+  useMotionTemplate,
+  useMotionValue,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import { useRef, useState } from "react";
 import { Github, ArrowUpRight, Search, X } from "lucide-react";
 import { LineReveal } from "./TextReveal";
 import { TiltCard } from "./TiltCard";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { BorderBeam } from "@/components/ui/border-beam";
+import { TextAnimate } from "@/components/ui/text-animate";
 import {
   Dialog,
   DialogContent,
@@ -134,33 +145,98 @@ const projects = [
 
 const categories = ["All", "Web App", "Tool", "Extension", "ML"];
 
-const ProjectCard = ({ project, onClick }: { project: typeof projects[0], onClick: () => void }) => {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px" });
+const smoothEase: [number, number, number, number] = [0.22, 1, 0.36, 1];
+
+const gridVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.06,
+      ease: smoothEase,
+    },
+  },
+};
+
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: smoothEase },
+  },
+};
+
+const ProjectCard = ({
+  project,
+  onClick,
+  index,
+}: {
+  project: typeof projects[0];
+  onClick: () => void;
+  index: number;
+}) => {
   const [isHovered, setIsHovered] = useState(false);
+  const pointerX = useMotionValue(50);
+  const pointerY = useMotionValue(50);
+  const smoothX = useSpring(pointerX, { stiffness: 220, damping: 28 });
+  const smoothY = useSpring(pointerY, { stiffness: 220, damping: 28 });
+  const imageX = useTransform(smoothX, [0, 100], [-6, 6]);
+  const imageY = useTransform(smoothY, [0, 100], [-5, 5]);
+  const glowBackground = useMotionTemplate`radial-gradient(220px circle at ${smoothX}% ${smoothY}%, hsl(var(--foreground) / 0.12), transparent 55%)`;
+
+  const handlePointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    const x = ((event.clientX - bounds.left) / bounds.width) * 100;
+    const y = ((event.clientY - bounds.top) / bounds.height) * 100;
+    pointerX.set(Math.min(100, Math.max(0, x)));
+    pointerY.set(Math.min(100, Math.max(0, y)));
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+    onClick();
+  };
 
   return (
     <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      layout
+      variants={cardVariants}
       exit={{ opacity: 0, scale: 0.9 }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.3) }}
       className="h-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <TiltCard intensity={8}>
         <motion.div
+          layout
           whileHover={{ y: -8, scale: 1.02 }}
           className="bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col cursor-pointer relative"
           onClick={onClick}
+          onMouseMove={handlePointerMove}
+          onKeyDown={handleKeyDown}
+          role="button"
+          tabIndex={0}
         >
+          <motion.div
+            className="pointer-events-none absolute inset-0 z-[1]"
+            style={{ background: glowBackground }}
+            animate={{ opacity: isHovered ? 1 : 0 }}
+            transition={{ duration: 0.25 }}
+          />
+
           <div className="relative overflow-hidden group">
             <motion.img
               src={project.image}
               alt={project.title}
               className="w-full h-56 object-cover"
+              style={{ x: imageX, y: imageY }}
               animate={{ 
                 scale: isHovered ? 1.15 : 1,
                 filter: isHovered ? 'brightness(0.7) blur(2px)' : 'brightness(1) blur(0px)'
@@ -303,6 +379,8 @@ const ProjectCard = ({ project, onClick }: { project: typeof projects[0], onClic
               )}
             </div>
           </div>
+
+          <BorderBeam duration={8} size={110} className="opacity-65" />
         </motion.div>
       </TiltCard>
     </motion.div>
@@ -343,7 +421,11 @@ export const ProjectsEnhanced = () => {
           className="text-center mb-12"
         >
           <LineReveal>
-            <h2 className="text-4xl md:text-5xl font-bold">Featured Projects</h2>
+            <h2 className="text-4xl md:text-5xl font-bold">
+              <TextAnimate animation="blurInUp" by="character" once>
+                Featured Projects
+              </TextAnimate>
+            </h2>
           </LineReveal>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -392,39 +474,52 @@ export const ProjectsEnhanced = () => {
             {categories.map((category) => (
               <motion.button
                 key={category}
+                layout
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(category)}
-                className={`px-4 md:px-6 py-2 rounded-full text-sm md:text-base font-medium transition-all duration-300 ${
+                className={`relative overflow-hidden px-4 md:px-6 py-2 rounded-full text-sm md:text-base font-medium transition-all duration-300 ${
                   selectedCategory === category
-                    ? "bg-primary text-primary-foreground shadow-lg"
+                    ? "text-primary-foreground shadow-lg"
                     : "bg-card border border-border hover:border-primary/50"
                 }`}
               >
-                {category}
+                {selectedCategory === category && (
+                  <motion.span
+                    layoutId="activeProjectCategory"
+                    className="absolute inset-0 rounded-full bg-primary"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <span className="relative z-10">{category}</span>
               </motion.button>
             ))}
           </div>
         </motion.div>
 
         {/* Projects Grid */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedCategory + searchQuery}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
-            {filteredProjects.map((project) => (
-              <ProjectCard
-                key={project.title}
-                project={project}
-                onClick={() => setSelectedProject(project)}
-              />
-            ))}
-          </motion.div>
-        </AnimatePresence>
+        <LayoutGroup>
+          <AnimatePresence mode="wait">
+            <motion.div
+              layout
+              key={selectedCategory + searchQuery}
+              variants={gridVariants}
+              initial="hidden"
+              animate="visible"
+              exit={{ opacity: 0 }}
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {filteredProjects.map((project, index) => (
+                <ProjectCard
+                  key={project.title}
+                  index={index}
+                  project={project}
+                  onClick={() => setSelectedProject(project)}
+                />
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </LayoutGroup>
 
         {filteredProjects.length === 0 && (
           <motion.div

@@ -87,6 +87,12 @@
 }
 
 @layer base {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
   * {
     @apply border-border;
   }
@@ -98,8 +104,21 @@
     scrollbar-color: hsl(var(--muted-foreground)) hsl(var(--background));
   }
 
-  * {
-    scroll-behavior: smooth;
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
   }
 
   body {
@@ -108,6 +127,17 @@
     overflow-x: hidden;
     line-height: 1.6;
     background-attachment: fixed;
+    }
+
+    body.cursor-none-enabled,
+    body.cursor-none-enabled * {
+      cursor: none !important;
+    }
+
+    body.cursor-none-enabled input,
+    body.cursor-none-enabled textarea,
+    body.cursor-none-enabled select {
+      cursor: text !important;
     }
 
     /* Custom scrollbar for webkit browsers */
@@ -254,6 +284,16 @@
 
   .btn-outline:hover {
     @apply bg-foreground/10 border-foreground/40;
+    transform: translateY(-3px);
+  }
+
+  .btn-secondary {
+    @apply relative overflow-hidden font-semibold px-8 py-4 rounded-xl transition-all duration-300;
+    @apply bg-transparent text-foreground border-2 border-border;
+  }
+
+  .btn-secondary:hover {
+    @apply border-foreground/40 bg-foreground/10;
     transform: translateY(-3px);
   }
 

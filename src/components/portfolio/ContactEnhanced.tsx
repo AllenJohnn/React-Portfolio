@@ -5,6 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { LineReveal } from "./TextReveal";
 import { MagneticButton } from "./MagneticButton";
+import { TextAnimate } from "@/components/ui/text-animate";
+import { ShimmerButton } from "@/components/ui/shimmer-button";
 import toast, { Toaster } from "react-hot-toast";
 
 interface FormData {
@@ -18,6 +20,8 @@ interface FormErrors {
   email?: string;
   message?: string;
 }
+
+type Gtag = (command: "event", eventName: string, params?: Record<string, string>) => void;
 
 export const ContactEnhanced = () => {
   const ref = useRef(null);
@@ -125,10 +129,11 @@ export const ContactEnhanced = () => {
     
     const text = `Hello! I'm ${formData.name}.%0A%0A${formData.message}%0A%0AEmail: ${formData.email}`;
     
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'whatsapp_contact', {
-        event_category: 'engagement',
-        event_label: 'WhatsApp Contact'
+    const gtag = (window as Window & { gtag?: Gtag }).gtag;
+    if (gtag) {
+      gtag("event", "whatsapp_contact", {
+        event_category: "engagement",
+        event_label: "WhatsApp Contact"
       });
     }
     
@@ -162,10 +167,11 @@ export const ContactEnhanced = () => {
     setIsSubmitting(false);
     setIsSubmitted(true);
     
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'contact_form_submit', {
-        event_category: 'engagement',
-        event_label: 'Email Contact'
+    const gtag = (window as Window & { gtag?: Gtag }).gtag;
+    if (gtag) {
+      gtag("event", "contact_form_submit", {
+        event_category: "engagement",
+        event_label: "Email Contact"
       });
     }
     
@@ -223,7 +229,11 @@ export const ContactEnhanced = () => {
             </motion.div>
             
             <LineReveal>
-              <h2 className="text-4xl md:text-5xl font-bold">Get In Touch</h2>
+              <h2 className="text-4xl md:text-5xl font-bold">
+                <TextAnimate animation="blurInUp" by="character" once>
+                  Get In Touch
+                </TextAnimate>
+              </h2>
             </LineReveal>
             <motion.div 
               initial={{ scaleX: 0 }}
@@ -357,12 +367,10 @@ export const ContactEnhanced = () => {
                   className="flex flex-col sm:flex-row gap-4 pt-2"
                 >
                   <MagneticButton>
-                    <motion.button
+                    <ShimmerButton
                       type="submit"
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
                       disabled={isSubmitting || isSubmitted}
-                      className="btn-primary flex items-center justify-center gap-3 flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="flex min-w-[180px] flex-1 items-center justify-center gap-3 rounded-xl"
                     >
                       {isSubmitting ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
@@ -374,7 +382,7 @@ export const ContactEnhanced = () => {
                       <span>
                         {isSubmitting ? "Sending..." : isSubmitted ? "Sent!" : "Send Email"}
                       </span>
-                    </motion.button>
+                    </ShimmerButton>
                   </MagneticButton>
 
                   <MagneticButton>

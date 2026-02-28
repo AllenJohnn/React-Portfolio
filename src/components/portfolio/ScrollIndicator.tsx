@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useSmoothScroll } from "@/components/ui/smooth-scroll-provider";
 
 const sections = [
   { id: "home", label: "Home" },
@@ -13,6 +14,7 @@ const sections = [
 export const ScrollIndicator = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [isVisible, setIsVisible] = useState(false);
+  const { scrollTo } = useSmoothScroll();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,10 +43,8 @@ export const ScrollIndicator = () => {
   }, []);
 
   const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    window.history.pushState(null, "", `#${sectionId}`);
+    scrollTo(`#${sectionId}`);
   };
 
   return (

@@ -5,6 +5,7 @@ import allenPic from "@/assets/allen-pic.jpg";
 import { TextReveal, LineReveal } from "./TextReveal";
 import { TiltCard } from "./TiltCard";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
+import { TextAnimate } from "@/components/ui/text-animate";
 
 const interests = [
   { icon: Music, label: "Music" },
@@ -98,7 +99,11 @@ export const About = () => {
             <motion.div variants={itemVariants}>
               <p className="text-primary font-medium text-sm mb-2 tracking-wider letter-spacing-animate">MY INTRODUCTION</p>
               <LineReveal>
-                <h2 className="text-4xl md:text-5xl font-bold tracking-wider letter-spacing-animate">About Me</h2>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-wider letter-spacing-animate">
+                  <TextAnimate animation="blurInUp" by="character" once>
+                    About Me
+                  </TextAnimate>
+                </h2>
               </LineReveal>
               <div className="section-line !mx-0 mt-4" />
             </motion.div>
