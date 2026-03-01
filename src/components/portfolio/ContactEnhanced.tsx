@@ -1,198 +1,161 @@
-import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
-import { Send, MessageCircle, Sparkles, CheckCircle2, Loader2, Mail, Linkedin, Github, Phone } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { motion, useAnimate, useInView } from "framer-motion";
+import { MouseEvent, useRef } from "react";
+import { Sparkles } from "lucide-react";
+import { SiGmail, SiLinkedin, SiGithub, SiSpotify, SiWhatsapp, SiInstagram } from "react-icons/si";
+import { IconType } from "react-icons";
 import { LineReveal } from "./TextReveal";
-import { MagneticButton } from "./MagneticButton";
 import { TextAnimate } from "@/components/ui/text-animate";
-import { ShimmerButton } from "@/components/ui/shimmer-button";
-import toast, { Toaster } from "react-hot-toast";
 
-interface FormData {
-  name: string;
-  email: string;
-  message: string;
-}
+type Side = "top" | "left" | "bottom" | "right";
+type KeyframeMap = {
+  [key in Side]: string[];
+};
 
-interface FormErrors {
-  name?: string;
-  email?: string;
-  message?: string;
-}
+const NO_CLIP = "polygon(0 0, 100% 0, 100% 100%, 0% 100%)";
+const BOTTOM_RIGHT_CLIP = "polygon(0 0, 100% 0, 0 0, 0% 100%)";
+const TOP_RIGHT_CLIP = "polygon(0 0, 0 100%, 100% 100%, 0% 100%)";
+const BOTTOM_LEFT_CLIP = "polygon(100% 100%, 100% 0, 100% 100%, 0 100%)";
+const TOP_LEFT_CLIP = "polygon(0 0, 100% 0, 100% 100%, 100% 0)";
 
-type Gtag = (command: "event", eventName: string, params?: Record<string, string>) => void;
+const ENTRANCE_KEYFRAMES: KeyframeMap = {
+  left: [BOTTOM_RIGHT_CLIP, NO_CLIP],
+  bottom: [BOTTOM_RIGHT_CLIP, NO_CLIP],
+  top: [BOTTOM_RIGHT_CLIP, NO_CLIP],
+  right: [TOP_LEFT_CLIP, NO_CLIP],
+};
+
+const EXIT_KEYFRAMES: KeyframeMap = {
+  left: [NO_CLIP, TOP_RIGHT_CLIP],
+  bottom: [NO_CLIP, TOP_RIGHT_CLIP],
+  top: [NO_CLIP, TOP_RIGHT_CLIP],
+  right: [NO_CLIP, BOTTOM_LEFT_CLIP],
+};
+
+const LinkBox = ({ Icon, href, label }: { Icon: IconType; href: string; label: string }) => {
+  const [scope, animate] = useAnimate();
+
+  const getNearestSide = (e: MouseEvent<HTMLAnchorElement>): Side => {
+    const box = e.currentTarget.getBoundingClientRect();
+
+    const proximityToLeft = {
+      proximity: Math.abs(box.left - e.clientX),
+      side: "left" as Side,
+    };
+    const proximityToRight = {
+      proximity: Math.abs(box.right - e.clientX),
+      side: "right" as Side,
+    };
+    const proximityToTop = {
+      proximity: Math.abs(box.top - e.clientY),
+      side: "top" as Side,
+    };
+    const proximityToBottom = {
+      proximity: Math.abs(box.bottom - e.clientY),
+      side: "bottom" as Side,
+    };
+
+    const sortedProximity = [
+      proximityToLeft,
+      proximityToRight,
+      proximityToTop,
+      proximityToBottom,
+    ].sort((a, b) => a.proximity - b.proximity);
+
+    return sortedProximity[0].side;
+  };
+
+  const handleMouseEnter = (e: MouseEvent<HTMLAnchorElement>) => {
+    const side = getNearestSide(e);
+
+    animate(scope.current, {
+      clipPath: ENTRANCE_KEYFRAMES[side],
+    }, {
+      duration: 0.3,
+      ease: "easeOut",
+    });
+  };
+
+  const handleMouseLeave = (e: MouseEvent<HTMLAnchorElement>) => {
+    const side = getNearestSide(e);
+
+    animate(scope.current, {
+      clipPath: EXIT_KEYFRAMES[side],
+    }, {
+      duration: 0.26,
+      ease: "easeInOut",
+    });
+  };
+
+  const handleFocus = () => {
+    animate(scope.current, {
+      clipPath: NO_CLIP,
+    }, {
+      duration: 0.24,
+      ease: "easeOut",
+    });
+  };
+
+  const handleBlur = () => {
+    animate(scope.current, {
+      clipPath: BOTTOM_RIGHT_CLIP,
+    }, {
+      duration: 0.2,
+      ease: "easeInOut",
+    });
+  };
+
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onMouseEnter={(e) => {
+        handleMouseEnter(e);
+      }}
+      onMouseLeave={(e) => {
+        handleMouseLeave(e);
+      }}
+      className="relative grid h-24 w-full place-content-center sm:h-28 md:h-36 lg:h-40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+    >
+      <Icon className="text-2xl sm:text-3xl md:text-4xl" />
+
+      <div
+        ref={scope}
+        style={{
+          clipPath: BOTTOM_RIGHT_CLIP,
+        }}
+        className="absolute inset-0 grid place-content-center bg-foreground text-background"
+      >
+        <Icon className="text-2xl sm:text-3xl md:text-4xl" />
+      </div>
+    </a>
+  );
+};
+
+const ClipPathLinks = () => {
+  return (
+    <div className="max-w-4xl mx-auto rounded-3xl overflow-hidden border border-border/80 bg-card/80 backdrop-blur-md shadow-2xl">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-border/80">
+        <div className="bg-card/80"><LinkBox Icon={SiGmail} href="mailto:allenjohnjoy2004@gmail.com" label="Gmail" /></div>
+        <div className="bg-card/80"><LinkBox Icon={SiSpotify} href="https://open.spotify.com/user/zcp0xorpnvycc1fao18w9z4du" label="Spotify" /></div>
+        <div className="bg-card/80"><LinkBox Icon={SiLinkedin} href="https://www.linkedin.com/in/allenjohnjoy/" label="LinkedIn" /></div>
+        <div className="bg-card/80"><LinkBox Icon={SiGithub} href="https://github.com/AllenJohnn" label="GitHub" /></div>
+        <div className="bg-card/80"><LinkBox Icon={SiWhatsapp} href="https://wa.me/916282091469" label="WhatsApp" /></div>
+        <div className="bg-card/80"><LinkBox Icon={SiInstagram} href="https://www.instagram.com/_allen.john_/" label="Instagram" /></div>
+      </div>
+    </div>
+  );
+};
 
 export const ContactEnhanced = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
-  const [formData, setFormData] = useState<FormData>({ name: "", email: "", message: "" });
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [focusedField, setFocusedField] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
-  const validateField = (name: string, value: string): string | undefined => {
-    switch (name) {
-      case "name":
-        if (!value.trim()) return "Name is required";
-        if (value.trim().length < 2) return "Name must be at least 2 characters";
-        break;
-      case "email":
-        if (!value.trim()) return "Email is required";
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return "Invalid email format";
-        break;
-      case "message":
-        if (!value.trim()) return "Message is required";
-        if (value.trim().length < 10) return "Message must be at least 10 characters";
-        break;
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    
-    if (errors[name as keyof FormErrors]) {
-      setErrors({ ...errors, [name]: undefined });
-    }
-  };
-
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    const error = validateField(name, value);
-    if (error) {
-      setErrors({ ...errors, [name]: error });
-    }
-    setFocusedField(null);
-  };
-
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {};
-    
-    Object.keys(formData).forEach((key) => {
-      const error = validateField(key, formData[key as keyof FormData]);
-      if (error) newErrors[key as keyof FormErrors] = error;
-    });
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const contactMethods = [
-    {
-      icon: Mail,
-      label: "Email",
-      value: "allenjohnjoy2004@gmail.com",
-      href: "mailto:allenjohnjoy2004@gmail.com",
-      color: "text-foreground",
-      bgColor: "bg-muted",
-      borderColor: "border-border",
-    },
-    {
-      icon: Phone,
-      label: "WhatsApp",
-      value: "+91-62820-91469",
-      href: "https://wa.me/916282091469",
-      color: "text-foreground",
-      bgColor: "bg-muted",
-      borderColor: "border-border",
-    },
-    {
-      icon: Linkedin,
-      label: "LinkedIn",
-      value: "allenjohnjoy",
-      href: "https://www.linkedin.com/in/allenjohnjoy/",
-      color: "text-foreground",
-      bgColor: "bg-muted",
-      borderColor: "border-border",
-    },
-    {
-      icon: Github,
-      label: "GitHub",
-      value: "AllenJohnn",
-      href: "https://github.com/AllenJohnn",
-      color: "text-foreground",
-      bgColor: "bg-muted",
-      borderColor: "border-border",
-    },
-  ];
-
-  const sendWhatsApp = async () => {
-    if (!validateForm()) {
-      toast.error("Please fix all errors before sending");
-      return;
-    }
-
-    setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const text = `Hello! I'm ${formData.name}.%0A%0A${formData.message}%0A%0AEmail: ${formData.email}`;
-    
-    const gtag = (window as Window & { gtag?: Gtag }).gtag;
-    if (gtag) {
-      gtag("event", "whatsapp_contact", {
-        event_category: "engagement",
-        event_label: "WhatsApp Contact"
-      });
-    }
-    
-    window.open(`https://wa.me/916282091469?text=${text}`, "_blank");
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    toast.success("Opening WhatsApp...");
-    
-    setTimeout(() => {
-      setFormData({ name: "", email: "", message: "" });
-      setIsSubmitted(false);
-    }, 3000);
-  };
-
-  const sendEmail = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      toast.error("Please fix all errors before sending");
-      return;
-    }
-
-    setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const subject = encodeURIComponent(`Portfolio Contact from ${formData.name}`);
-    const body = encodeURIComponent(`${formData.message}\n\nFrom: ${formData.name}\nEmail: ${formData.email}`);
-    window.location.href = `mailto:allenjohnjoy2004@gmail.com?subject=${subject}&body=${body}`;
-    
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    const gtag = (window as Window & { gtag?: Gtag }).gtag;
-    if (gtag) {
-      gtag("event", "contact_form_submit", {
-        event_category: "engagement",
-        event_label: "Email Contact"
-      });
-    }
-    
-    toast.success("Message sent successfully!", {
-      duration: 4000,
-      style: {
-        background: 'hsl(var(--foreground))',
-        color: 'hsl(var(--background))',
-        fontWeight: '600',
-      },
-    });
-    
-    setTimeout(() => {
-      setFormData({ name: "", email: "", message: "" });
-      setIsSubmitted(false);
-    }, 3000);
-  };
 
   return (
     <>
-      <Toaster position="bottom-center" />
       <section id="contact" className="py-16 md:py-20 lg:py-24 relative overflow-hidden">
         <motion.div
           animate={{
@@ -252,191 +215,18 @@ export const ContactEnhanced = () => {
             </motion.p>
           </motion.div>
 
-          <motion.form
+          <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5 }}
-            onSubmit={sendEmail}
-            className="max-w-2xl mx-auto"
+            className="max-w-5xl mx-auto"
           >
-            <div className="bg-card border border-border rounded-2xl p-8 md:p-10 shadow-xl">
-              <div className="space-y-6">
-                {/* Name Field */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.6 }}
-                >
-                  <label className="block text-sm font-medium mb-2">
-                    Name <span className="text-destructive">*</span>
-                  </label>
-                  <Input
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    onFocus={() => setFocusedField("name")}
-                    onBlur={handleBlur}
-                    placeholder="Your name"
-                    className={`h-12 transition-all duration-300 ${
-                      focusedField === "name" ? "ring-2 ring-primary" : ""
-                    } ${errors.name ? "border-destructive" : ""}`}
-                    disabled={isSubmitting || isSubmitted}
-                  />
-                  {errors.name && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-destructive text-sm mt-1"
-                    >
-                      {errors.name}
-                    </motion.p>
-                  )}
-                </motion.div>
-
-                {/* Email Field */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.7 }}
-                >
-                  <label className="block text-sm font-medium mb-2">
-                    Email <span className="text-destructive">*</span>
-                  </label>
-                  <Input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    onFocus={() => setFocusedField("email")}
-                    onBlur={handleBlur}
-                    placeholder="your.email@example.com"
-                    className={`h-12 transition-all duration-300 ${
-                      focusedField === "email" ? "ring-2 ring-primary" : ""
-                    } ${errors.email ? "border-destructive" : ""}`}
-                    disabled={isSubmitting || isSubmitted}
-                  />
-                  {errors.email && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-destructive text-sm mt-1"
-                    >
-                      {errors.email}
-                    </motion.p>
-                  )}
-                </motion.div>
-
-                {/* Message Field */}
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.8 }}
-                >
-                  <label className="block text-sm font-medium mb-2">
-                    Message <span className="text-destructive">*</span>
-                  </label>
-                  <Textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    onFocus={() => setFocusedField("message")}
-                    onBlur={handleBlur}
-                    placeholder="Tell me about your project..."
-                    rows={6}
-                    className={`transition-all duration-300 resize-none ${
-                      focusedField === "message" ? "ring-2 ring-primary" : ""
-                    } ${errors.message ? "border-destructive" : ""}`}
-                    disabled={isSubmitting || isSubmitted}
-                  />
-                  {errors.message && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="text-destructive text-sm mt-1"
-                    >
-                      {errors.message}
-                    </motion.p>
-                  )}
-                </motion.div>
-
-                {/* Buttons */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.9 }}
-                  className="flex flex-col sm:flex-row gap-4 pt-2"
-                >
-                  <MagneticButton>
-                    <ShimmerButton
-                      type="submit"
-                      disabled={isSubmitting || isSubmitted}
-                      className="flex min-w-[180px] flex-1 items-center justify-center gap-3 rounded-xl"
-                    >
-                      {isSubmitting ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : isSubmitted ? (
-                        <CheckCircle2 className="w-5 h-5" />
-                      ) : (
-                        <Send className="w-5 h-5" />
-                      )}
-                      <span>
-                        {isSubmitting ? "Sending..." : isSubmitted ? "Sent!" : "Send Email"}
-                      </span>
-                    </ShimmerButton>
-                  </MagneticButton>
-
-                  <MagneticButton>
-                    <motion.button
-                      type="button"
-                      onClick={sendWhatsApp}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      disabled={isSubmitting || isSubmitted}
-                      className="btn-secondary flex items-center justify-center gap-3 flex-1 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <MessageCircle className="w-5 h-5" />
-                      <span>WhatsApp</span>
-                    </motion.button>
-                  </MagneticButton>
-                </motion.div>
-              </div>
+            <div className="text-center mb-6">
+              <p className="text-sm sm:text-base text-muted-foreground">Choose your preferred platform to connect</p>
             </div>
-          </motion.form>
+            <ClipPathLinks />
+          </motion.div>
 
-                  {/* Contact Methods */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.6, delay: 0.7 }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 max-w-5xl mx-auto"
-                  >
-                    {contactMethods.map((method, index) => (
-                      <motion.a
-                        key={method.label}
-                        href={method.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ delay: 0.8 + index * 0.1 }}
-                        whileHover={{ y: -5, scale: 1.02 }}
-                        className={`group p-6 rounded-xl ${method.bgColor} border ${method.borderColor} hover:shadow-lg transition-all cursor-pointer`}
-                      >
-                        <div className="flex flex-col items-center text-center gap-3">
-                          <motion.div
-                            whileHover={{ scale: 1.1, rotate: 5 }}
-                            className={`w-12 h-12 rounded-full ${method.bgColor} border ${method.borderColor} flex items-center justify-center ${method.color}`}
-                          >
-                            <method.icon size={24} />
-                          </motion.div>
-                          <div>
-                            <p className="font-semibold text-foreground mb-1">{method.label}</p>
-                            <p className="text-sm text-muted-foreground break-all">{method.value}</p>
-                          </div>
-                        </div>
-                      </motion.a>
-                    ))}
-                  </motion.div>
         </div>
       </section>
     </>
