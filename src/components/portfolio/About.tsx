@@ -1,4 +1,4 @@
-import { motion, useInView, useScroll, useTransform } from "framer-motion";
+import { motion, useInView, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { Mail, Phone, Linkedin, Github, Music, Plane, Film, Trophy } from "lucide-react";
 import allenPic from "@/assets/allen-pic.jpg";
@@ -6,6 +6,8 @@ import { TextReveal, LineReveal } from "./TextReveal";
 import { TiltCard } from "./TiltCard";
 import { useScrollAnimation } from "@/hooks/use-scroll-animation";
 import { TextAnimate } from "@/components/ui/text-animate";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { BubbleText } from "./BubbleText";
 
 const interests = [
   { icon: Music, label: "Music" },
@@ -34,6 +36,8 @@ const itemVariants = {
 export const About = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, margin: "-100px" });
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
   const imageAnimation = useScrollAnimation({ delay: 200, animationClass: 'animate__fadeInLeft' });
   const textAnimation = useScrollAnimation({ delay: 400, animationClass: 'animate__fadeInRight' });
   
@@ -42,12 +46,15 @@ export const About = () => {
     offset: ["start end", "end start"],
   });
   
-  const imageY = useTransform(scrollYProgress, [0, 1], [50, -50]);
+  const imageOffset = prefersReducedMotion ? 0 : isMobile ? 20 : 50;
+  const imageYRaw = useTransform(scrollYProgress, [0, 1], [imageOffset, -imageOffset]);
+  const imageY = useSpring(imageYRaw, { stiffness: 90, damping: 22, mass: 0.5 });
+  const sectionGlowY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : isMobile ? -45 : -100]);
 
   return (
     <section id="about" className="py-16 md:py-20 lg:py-24 relative overflow-hidden">
       <motion.div
-        style={{ y: useTransform(scrollYProgress, [0, 1], [0, -100]) }}
+        style={{ y: sectionGlowY }}
         className="absolute top-0 left-0 w-48 h-48 md:w-96 md:h-96 bg-primary/5 rounded-full blur-3xl"
       />
       
@@ -68,6 +75,10 @@ export const About = () => {
                   <motion.img
                     src={allenPic}
                     alt="Allen John Joy"
+                    loading="lazy"
+                    fetchPriority="low"
+                    decoding="async"
+                    sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 400px"
                     whileHover={{ scale: 1.05 }}
                     transition={{ duration: 0.3 }}
                     className="relative w-full max-w-[400px] aspect-square object-cover rounded-2xl"
@@ -115,6 +126,10 @@ export const About = () => {
                   delay={0.3}
                 />
               </p>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <BubbleText text="Designing smooth, thoughtful digital experiences." className="text-base md:text-lg" />
             </motion.div>
 
             <motion.div variants={itemVariants} className="space-y-3 py-4">

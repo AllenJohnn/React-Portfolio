@@ -140,11 +140,11 @@ const ClipPathLinks = () => {
     <div className="max-w-4xl mx-auto rounded-3xl overflow-hidden border border-border/80 bg-card/80 backdrop-blur-md shadow-2xl">
       <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-border/80">
         <div className="bg-card/80"><LinkBox Icon={SiGmail} href="mailto:allenjohnjoy2004@gmail.com" label="Gmail" /></div>
-        <div className="bg-card/80"><LinkBox Icon={SiSpotify} href="https://open.spotify.com/user/zcp0xorpnvycc1fao18w9z4du" label="Spotify" /></div>
         <div className="bg-card/80"><LinkBox Icon={SiLinkedin} href="https://www.linkedin.com/in/allenjohnjoy/" label="LinkedIn" /></div>
         <div className="bg-card/80"><LinkBox Icon={SiGithub} href="https://github.com/AllenJohnn" label="GitHub" /></div>
         <div className="bg-card/80"><LinkBox Icon={SiWhatsapp} href="https://wa.me/916282091469" label="WhatsApp" /></div>
         <div className="bg-card/80"><LinkBox Icon={SiInstagram} href="https://www.instagram.com/_allen.john_/" label="Instagram" /></div>
+        <div className="bg-card/80"><LinkBox Icon={SiSpotify} href="https://open.spotify.com/user/zcp0xorpnvycc1fao18w9z4du" label="Spotify" /></div>
       </div>
     </div>
   );

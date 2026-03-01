@@ -5,49 +5,33 @@ import { ScrollToTopFab } from "@/components/portfolio/ScrollToTopFab";
 import { Hero } from "@/components/portfolio/Hero";
 import { About } from "@/components/portfolio/About";
 import { SkillsEnhanced } from "@/components/portfolio/SkillsEnhanced";
-import { ProjectsEnhanced } from "@/components/portfolio/ProjectsEnhanced";
 import { Experience } from "@/components/portfolio/Experience";
-import { ContactEnhanced } from "@/components/portfolio/ContactEnhanced";
 import { Footer } from "@/components/portfolio/Footer";
 import { SectionDivider } from "@/components/portfolio/SectionDivider";
 import { ThemeSwitcher } from "@/components/portfolio/ThemeSwitcher";
 import { SEO } from "@/components/SEO";
-import { ReactNode, Suspense } from "react";
-import { motion } from "framer-motion";
+import { Suspense, lazy } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { SectionParallaxTransition } from "@/components/portfolio/ParallaxSection";
+import { useIsMobile } from "@/hooks/use-mobile";
+
+const ProjectsEnhanced = lazy(() => import("@/components/portfolio/ProjectsEnhanced").then((module) => ({ default: module.ProjectsEnhanced })));
+const ContactEnhanced = lazy(() => import("@/components/portfolio/ContactEnhanced").then((module) => ({ default: module.ContactEnhanced })));
 
 const SectionLoader = () => (
   <div className="h-96 bg-gradient-to-b from-background via-background/50 to-background animate-pulse" />
 );
 
-const sectionVariants = {
-  hidden: { opacity: 0, y: 36 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.75,
-      ease: [0.22, 1, 0.36, 1],
-    },
-  },
-};
-
-const SectionReveal = ({ children }: { children: ReactNode }) => (
-  <motion.div
-    variants={sectionVariants}
-    initial="hidden"
-    whileInView="visible"
-    viewport={{ once: true, amount: 0.15 }}
-  >
-    {children}
-  </motion.div>
-);
-
 const Index = () => {
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
+  const enableSmoothCursor = !isMobile && !prefersReducedMotion;
+
   return (
     <>
       <SEO />
-      <SmoothCursor />
+      {enableSmoothCursor && <SmoothCursor />}
       <ThemeSwitcher />
       <motion.main
         className="relative min-h-screen overflow-x-hidden"
@@ -60,36 +44,30 @@ const Index = () => {
         <ScrollToTopFab />
         <Navbar />
 
-        <SectionReveal>
-          <Hero />
-        </SectionReveal>
+        <Hero />
         <SectionDivider />
-        <SectionReveal>
+        <SectionParallaxTransition desktopOffset={44} mobileOffset={18} desktopTilt={0.34} mobileTilt={0.13}>
           <About />
-        </SectionReveal>
+        </SectionParallaxTransition>
         <SectionDivider />
-        <SectionReveal>
+        <SectionParallaxTransition desktopOffset={24} mobileOffset={10} desktopTilt={0.18} mobileTilt={0.08}>
           <Experience />
-        </SectionReveal>
+        </SectionParallaxTransition>
         <SectionDivider />
-        <SectionReveal>
+        <SectionParallaxTransition desktopOffset={20} mobileOffset={8} desktopTilt={0.14} mobileTilt={0.06}>
           <SkillsEnhanced />
-        </SectionReveal>
+        </SectionParallaxTransition>
         <SectionDivider />
-        <SectionReveal>
+        <SectionParallaxTransition desktopOffset={56} mobileOffset={22} desktopTilt={0.4} mobileTilt={0.14}>
           <Suspense fallback={<SectionLoader />}>
             <ProjectsEnhanced />
           </Suspense>
-        </SectionReveal>
+        </SectionParallaxTransition>
         <SectionDivider />
-        <SectionReveal>
-          <Suspense fallback={<SectionLoader />}>
-            <ContactEnhanced />
-          </Suspense>
-        </SectionReveal>
-        <SectionReveal>
-          <Footer />
-        </SectionReveal>
+        <Suspense fallback={<SectionLoader />}>
+          <ContactEnhanced />
+        </Suspense>
+        <Footer />
       </motion.main>
     </>
   );

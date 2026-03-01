@@ -235,6 +235,10 @@ const ProjectCard = ({
             <motion.img
               src={project.image}
               alt={project.title}
+              loading="lazy"
+              fetchPriority="low"
+              decoding="async"
+              sizes="(max-width: 768px) 92vw, (max-width: 1200px) 48vw, 32vw"
               className="w-full h-56 object-cover"
               style={{ x: imageX, y: imageY }}
               animate={{ 
@@ -548,6 +552,9 @@ export const ProjectsEnhanced = () => {
                 <img
                   src={selectedProject.image}
                   alt={selectedProject.title}
+                  loading="lazy"
+                  decoding="async"
+                  sizes="(max-width: 768px) 92vw, 720px"
                   className="w-full h-64 object-cover rounded-lg"
                 />
                 
