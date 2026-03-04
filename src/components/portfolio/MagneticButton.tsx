@@ -1,5 +1,6 @@
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { useRef, ReactNode } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -9,6 +10,9 @@ interface MagneticButtonProps {
 
 export const MagneticButton = ({ children, className = "", strength = 0.3 }: MagneticButtonProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
+  const disableMagnet = isMobile || prefersReducedMotion;
   
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -17,6 +21,7 @@ export const MagneticButton = ({ children, className = "", strength = 0.3 }: Mag
   const springY = useSpring(y, { stiffness: 300, damping: 20 });
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (disableMagnet) return;
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -30,6 +35,10 @@ export const MagneticButton = ({ children, className = "", strength = 0.3 }: Mag
     x.set(0);
     y.set(0);
   };
+
+  if (disableMagnet) {
+    return <div className={className}>{children}</div>;
+  }
 
   return (
     <motion.div

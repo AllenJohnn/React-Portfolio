@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useSmoothScroll } from "@/components/ui/smooth-scroll-provider";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const sections = [
   { id: "home", label: "Home" },
@@ -12,40 +13,62 @@ const sections = [
 ];
 
 export const ScrollIndicator = () => {
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
+  const shouldRender = !isMobile;
   const [activeSection, setActiveSection] = useState("home");
   const [isVisible, setIsVisible] = useState(false);
   const { scrollTo } = useSmoothScroll();
 
   useEffect(() => {
+    if (!shouldRender) {
+      return;
+    }
+
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsVisible(window.scrollY > 300);
+      if (ticking) {
+        return;
+      }
 
-      const sectionElements = sections.map(section => ({
-        id: section.id,
-        element: document.getElementById(section.id),
-      }));
+      ticking = true;
+      requestAnimationFrame(() => {
+        setIsVisible(window.scrollY > 300);
 
-      for (let i = sectionElements.length - 1; i >= 0; i--) {
-        const section = sectionElements[i];
-        if (section.element) {
-          const rect = section.element.getBoundingClientRect();
-          if (rect.top <= window.innerHeight / 2) {
-            setActiveSection(section.id);
-            break;
+        const sectionElements = sections.map(section => ({
+          id: section.id,
+          element: document.getElementById(section.id),
+        }));
+
+        for (let i = sectionElements.length - 1; i >= 0; i--) {
+          const section = sectionElements[i];
+          if (section.element) {
+            const rect = section.element.getBoundingClientRect();
+            if (rect.top <= window.innerHeight / 2) {
+              setActiveSection(section.id);
+              break;
+            }
           }
         }
-      }
+
+        ticking = false;
+      });
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [shouldRender]);
 
   const scrollToSection = (sectionId: string) => {
     window.history.pushState(null, "", `#${sectionId}`);
     scrollTo(`#${sectionId}`);
   };
+
+  if (!shouldRender) {
+    return null;
+  }
 
   return (
     <AnimatePresence>
@@ -62,7 +85,7 @@ export const ScrollIndicator = () => {
               key={section.id}
               className="relative group cursor-pointer"
               onClick={() => scrollToSection(section.id)}
-              whileHover={{ scale: 1.2 }}
+              whileHover={!prefersReducedMotion ? { scale: 1.2 } : undefined}
               whileTap={{ scale: 0.9 }}
             >
               <motion.div
@@ -72,7 +95,7 @@ export const ScrollIndicator = () => {
                     : "bg-transparent border-muted-foreground/40 hover:border-primary/60"
                 }`}
                 animate={
-                  activeSection === section.id
+                  activeSection === section.id && !prefersReducedMotion
                     ? {
                         boxShadow: [
                           "0 0 0 0 rgba(255, 255, 255, 0.3)",

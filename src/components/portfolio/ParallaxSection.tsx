@@ -91,9 +91,10 @@ interface ParallaxBackgroundProps {
 }
 
 export const ParallaxBackground = ({ className = "" }: ParallaxBackgroundProps) => {
+  const isMobile = useIsMobile();
   const prefersReducedMotion = useReducedMotion();
 
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion || isMobile) {
     return null;
   }
 

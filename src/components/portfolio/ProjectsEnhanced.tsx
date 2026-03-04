@@ -8,8 +8,9 @@ import {
   useMotionValue,
   useSpring,
   useTransform,
+  useReducedMotion,
 } from "framer-motion";
-import { useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Github, ArrowUpRight, Search, X } from "lucide-react";
 import { LineReveal } from "./TextReveal";
 import { TiltCard } from "./TiltCard";
@@ -24,6 +25,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import spotifyImg from "@/assets/projects/spotify.png";
 import medicineImg from "@/assets/projects/medicine.png";
@@ -172,10 +174,12 @@ const ProjectCard = ({
   project,
   onClick,
   index,
+  disableHoverEffects,
 }: {
   project: typeof projects[0];
   onClick: () => void;
   index: number;
+  disableHoverEffects: boolean;
 }) => {
   const [isHovered, setIsHovered] = useState(false);
   const pointerX = useMotionValue(50);
@@ -185,8 +189,13 @@ const ProjectCard = ({
   const imageX = useTransform(smoothX, [0, 100], [-6, 6]);
   const imageY = useTransform(smoothY, [0, 100], [-5, 5]);
   const glowBackground = useMotionTemplate`radial-gradient(220px circle at ${smoothX}% ${smoothY}%, hsl(var(--foreground) / 0.12), transparent 55%)`;
+  const showInteractiveOverlay = !disableHoverEffects && isHovered;
 
   const handlePointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    if (disableHoverEffects) {
+      return;
+    }
+
     const bounds = event.currentTarget.getBoundingClientRect();
     const x = ((event.clientX - bounds.left) / bounds.width) * 100;
     const y = ((event.clientY - bounds.top) / bounds.height) * 100;
@@ -210,13 +219,13 @@ const ProjectCard = ({
       exit={{ opacity: 0, scale: 0.9 }}
       transition={{ duration: 0.5, delay: Math.min(index * 0.05, 0.3) }}
       className="h-full"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={!disableHoverEffects ? () => setIsHovered(true) : undefined}
+      onMouseLeave={!disableHoverEffects ? () => setIsHovered(false) : undefined}
     >
       <TiltCard intensity={8}>
         <motion.div
           layout
-          whileHover={{ y: -8, scale: 1.02 }}
+          whileHover={!disableHoverEffects ? { y: -8, scale: 1.02 } : undefined}
           className="bg-card border border-border rounded-2xl overflow-hidden hover:border-primary/50 transition-all duration-500 shadow-lg hover:shadow-2xl h-full flex flex-col cursor-pointer relative"
           onClick={onClick}
           onMouseMove={handlePointerMove}
@@ -227,7 +236,7 @@ const ProjectCard = ({
           <motion.div
             className="pointer-events-none absolute inset-0 z-[1]"
             style={{ background: glowBackground }}
-            animate={{ opacity: isHovered ? 1 : 0 }}
+            animate={{ opacity: showInteractiveOverlay ? 1 : 0 }}
             transition={{ duration: 0.25 }}
           />
 
@@ -242,22 +251,22 @@ const ProjectCard = ({
               className="w-full h-56 object-cover"
               style={{ x: imageX, y: imageY }}
               animate={{ 
-                scale: isHovered ? 1.15 : 1,
-                filter: isHovered ? 'brightness(0.7) blur(2px)' : 'brightness(1) blur(0px)'
+                scale: showInteractiveOverlay ? 1.15 : 1,
+                filter: showInteractiveOverlay ? 'brightness(0.7) blur(2px)' : 'brightness(1) blur(0px)'
               }}
               transition={{ duration: 0.6, ease: "easeOut" }}
             />
             
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: isHovered ? 1 : 0 }}
+              animate={{ opacity: showInteractiveOverlay ? 1 : 0 }}
               transition={{ duration: 0.4 }}
               className="absolute inset-0 bg-foreground/10"
             />
             
             <motion.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: isHovered ? 1 : 0 }}
+              animate={{ opacity: showInteractiveOverlay ? 1 : 0 }}
               transition={{ duration: 0.3 }}
               className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent"
             />
@@ -265,7 +274,7 @@ const ProjectCard = ({
             {/* glass effect overlay thing */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 20 }}
+              animate={{ opacity: showInteractiveOverlay ? 1 : 0, y: showInteractiveOverlay ? 0 : 20 }}
               transition={{ duration: 0.3, delay: 0.1 }}
               className="absolute inset-0 backdrop-blur-[2px] flex items-center justify-center gap-4"
             >
@@ -275,7 +284,7 @@ const ProjectCard = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  whileHover={{ scale: 1.2, rotate: 5 }}
+                  whileHover={!disableHoverEffects ? { scale: 1.2, rotate: 5 } : undefined}
                   whileTap={{ scale: 0.9 }}
                   className="w-14 h-14 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary transition-all"
                 >
@@ -288,7 +297,7 @@ const ProjectCard = ({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
-                  whileHover={{ scale: 1.2, rotate: -5 }}
+                  whileHover={!disableHoverEffects ? { scale: 1.2, rotate: -5 } : undefined}
                   whileTap={{ scale: 0.9 }}
                   className="w-14 h-14 rounded-xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center hover:bg-primary hover:border-primary transition-all"
                 >
@@ -393,31 +402,45 @@ const ProjectCard = ({
 
 export const ProjectsEnhanced = () => {
   const ref = useRef(null);
+  const isMobile = useIsMobile();
+  const shouldReduceMotion = useReducedMotion();
+  const disableHoverEffects = isMobile || shouldReduceMotion;
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedProject, setSelectedProject] = useState<typeof projects[0] | null>(null);
 
-  const filteredProjects = projects.filter((project) => {
-    const matchesCategory = selectedCategory === "All" || project.category === selectedCategory;
-    const matchesSearch = project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         project.tech.some(tech => tech.toLowerCase().includes(searchQuery.toLowerCase()));
-    return matchesCategory && matchesSearch;
-  });
+  const filteredProjects = useMemo(() => {
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+
+    return projects.filter((project) => {
+      const matchesCategory = selectedCategory === "All" || project.category === selectedCategory;
+
+      if (!normalizedQuery) {
+        return matchesCategory;
+      }
+
+      const matchesSearch =
+        project.title.toLowerCase().includes(normalizedQuery) ||
+        project.description.toLowerCase().includes(normalizedQuery) ||
+        project.tech.some((tech) => tech.toLowerCase().includes(normalizedQuery));
+
+      return matchesCategory && matchesSearch;
+    });
+  }, [searchQuery, selectedCategory]);
 
   return (
-    <section id="projects" className="py-24 relative overflow-hidden">
+    <section id="projects" className="py-16 md:py-20 lg:py-24 relative overflow-hidden">
       <motion.div
-        animate={{
+        animate={!disableHoverEffects ? {
           scale: [1, 1.2, 1],
           opacity: [0.3, 0.5, 0.3]
-        }}
-        transition={{ duration: 8, repeat: Infinity }}
+        } : { opacity: 0.25, scale: 1 }}
+        transition={!disableHoverEffects ? { duration: 8, repeat: Infinity } : { duration: 0.2 }}
         className="absolute top-1/4 right-0 w-96 h-96 bg-accent/10 rounded-full blur-3xl"
       />
 
-      <div className="container mx-auto px-[8%]" ref={ref}>
+      <div className="container mx-auto px-4 sm:px-6 md:px-[8%]" ref={ref}>
         <motion.div
           initial={{ opacity: 0 }}
           animate={isInView ? { opacity: 1 } : {}}
@@ -435,7 +458,7 @@ export const ProjectsEnhanced = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="text-muted-foreground mt-4 text-lg"
+            className="text-muted-foreground mt-4 text-base md:text-lg"
           >
             A showcase of my best work and personal projects
           </motion.p>
@@ -454,7 +477,7 @@ export const ProjectsEnhanced = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mb-12"
         >
-          <div className="max-w-2xl mx-auto mb-8">
+          <div className="max-w-2xl mx-auto mb-6 md:mb-8">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
               <Input
@@ -465,6 +488,7 @@ export const ProjectsEnhanced = () => {
               />
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery("")}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
                 >
@@ -479,7 +503,7 @@ export const ProjectsEnhanced = () => {
               <motion.button
                 key={category}
                 layout
-                whileHover={{ scale: 1.05 }}
+                whileHover={!disableHoverEffects ? { scale: 1.05 } : undefined}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedCategory(category)}
                 className={`relative overflow-hidden px-4 md:px-6 py-2 rounded-full text-sm md:text-base font-medium transition-all duration-300 ${
@@ -511,13 +535,14 @@ export const ProjectsEnhanced = () => {
               initial="hidden"
               animate="visible"
               exit={{ opacity: 0 }}
-              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-7 lg:gap-8"
             >
               {filteredProjects.map((project, index) => (
                 <ProjectCard
                   key={project.title}
                   index={index}
                   project={project}
+                  disableHoverEffects={disableHoverEffects}
                   onClick={() => setSelectedProject(project)}
                 />
               ))}
@@ -579,7 +604,7 @@ export const ProjectsEnhanced = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                   {selectedProject.github && (
                     <a
                       href={selectedProject.github}

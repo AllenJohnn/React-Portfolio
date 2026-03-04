@@ -15,6 +15,7 @@ type Gtag = (command: "event", eventName: string, params?: Record<string, string
 export const Hero = () => {
   const isMobile = useIsMobile();
   const prefersReducedMotion = useReducedMotion();
+  const disableHeavyEffects = isMobile || prefersReducedMotion;
   const { scrollY } = useScroll();
   const yDistance = prefersReducedMotion ? 0 : isMobile ? 24 : 80;
   const y = useTransform(scrollY, [0, 500], [0, yDistance]);
@@ -23,22 +24,22 @@ export const Hero = () => {
   const heroScale = useTransform(scrollY, [0, 350], [1, prefersReducedMotion ? 1 : isMobile ? 0.995 : 0.985]);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+    <section id="home" className="relative min-h-[100svh] flex items-center overflow-hidden">
       <ParallaxBackground />
 
-      <div className="bg-float fixed inset-0 z-0 opacity-[0.02] pointer-events-none">
+      <div className="bg-float fixed inset-0 z-0 opacity-[0.02] pointer-events-none hidden md:block">
         <span></span><span></span><span></span>
       </div>
 
-      <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-bl from-primary/[0.08] via-accent/[0.05] to-transparent rounded-bl-[50%] z-0" />
+      <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-bl from-primary/[0.08] via-accent/[0.05] to-transparent rounded-bl-[50%] z-0 hidden md:block" />
       
-      <motion.div style={{ y: smoothY, opacity: heroOpacity, scale: heroScale }} className="relative z-10 container mx-auto px-4 md:px-[8%] pt-24 md:pt-32 pb-20 md:pb-24">
+      <motion.div style={{ y: disableHeavyEffects ? 0 : smoothY, opacity: heroOpacity, scale: heroScale }} className="relative z-10 container mx-auto px-4 sm:px-6 md:px-[8%] pt-24 md:pt-32 pb-20 md:pb-24">
         <div className="flex flex-col lg:flex-row flex-wrap justify-between items-center gap-8 md:gap-12">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
-            className="flex-1 min-w-[320px] max-w-[600px]"
+            className="flex-1 min-w-0 w-full max-w-[600px]"
           >
             <motion.p
               initial={{ opacity: 0, x: -20 }}
@@ -77,7 +78,7 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.5 }}
-              className="text-lg text-muted-foreground mb-5 max-w-[520px] leading-relaxed"
+              className="text-base sm:text-lg text-muted-foreground mb-5 max-w-[520px] leading-relaxed"
             >
               Developing sleek, responsive web experiences driven by clean code and smart engineering.
             </motion.p>
@@ -95,16 +96,16 @@ export const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.65 }}
-              className="flex flex-wrap gap-4"
+              className="flex flex-wrap gap-3 sm:gap-4"
             >
               <MagneticButton>
                 <motion.a
                   href="https://github.com/AllenJohnn"
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={!disableHeavyEffects ? { scale: 1.02 } : undefined}
                   whileTap={{ scale: 0.98 }}
-                  className="btn-primary flex items-center gap-3"
+                  className="btn-primary w-full sm:w-auto flex items-center justify-center gap-3"
                 >
                   <Github size={18} />
                   <span>GitHub</span>
@@ -124,9 +125,9 @@ export const Hero = () => {
                       });
                     }
                   }}
-                  whileHover={{ scale: 1.02 }}
+                  whileHover={!disableHeavyEffects ? { scale: 1.02 } : undefined}
                   whileTap={{ scale: 0.98 }}
-                  className="btn-outline flex items-center gap-3"
+                  className="btn-outline w-full sm:w-auto flex items-center justify-center gap-3"
                 >
                   <Download size={18} />
                   <span>Download CV</span>
@@ -139,23 +140,23 @@ export const Hero = () => {
             initial={{ opacity: 0, scale: 0.8, rotateY: -15 }}
             animate={{ opacity: 1, scale: 1, rotateY: 0 }}
             transition={{ duration: 1, delay: 0.5, type: "spring" }}
-            className="flex-1 min-w-[300px] flex justify-center perspective-1000"
+            className="flex-1 min-w-0 w-full flex justify-center perspective-1000"
           >
             <div className="relative group">
               <motion.div 
-                animate={{ 
+                animate={!disableHeavyEffects ? {
                   rotate: [0, 5, 0],
                   scale: [1, 1.02, 1],
-                }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                } : { rotate: 0, scale: 1 }}
+                transition={!disableHeavyEffects ? { duration: 6, repeat: Infinity, ease: "easeInOut" } : { duration: 0.2 }}
                 className="absolute -top-5 -left-5 right-5 bottom-5 border-2 border-primary/30 rounded-2xl z-0" 
               />
               <motion.div 
-                animate={{ 
+                animate={!disableHeavyEffects ? {
                   rotate: [0, -3, 0],
                   scale: [1, 1.01, 1],
-                }}
-                transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                } : { rotate: 0, scale: 1 }}
+                transition={!disableHeavyEffects ? { duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 } : { duration: 0.2 }}
                 className="absolute -top-8 -left-8 right-8 bottom-8 border border-accent/20 rounded-2xl z-0" 
               />
               
@@ -167,7 +168,7 @@ export const Hero = () => {
                 fetchPriority="high"
                 decoding="async"
                 sizes="(max-width: 640px) 280px, (max-width: 768px) 320px, (max-width: 1024px) 350px, 400px"
-                whileHover={{ scale: 1.03 }}
+                whileHover={!disableHeavyEffects ? { scale: 1.03 } : undefined}
                 transition={{ duration: 0.4 }}
                 className="relative z-10 w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] object-cover rounded-2xl"
                 style={{ boxShadow: "0 25px 70px rgba(0, 0, 0, 0.6)" }}

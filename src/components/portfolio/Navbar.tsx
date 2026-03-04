@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Dock, DockIcon } from "@/components/ui/dock";
 import { useSmoothScroll } from "@/components/ui/smooth-scroll-provider";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -62,6 +63,7 @@ const DATA = {
 };
 
 export const Navbar = () => {
+  const isMobile = useIsMobile();
   const sectionMap = useMemo(() => new Map(DATA.navbar.map((item) => [item.id, item])), []);
   const [activeSection, setActiveSection] = useState("home");
   const { scrollTo } = useSmoothScroll();
@@ -166,9 +168,9 @@ export const Navbar = () => {
           </DockIcon>
         ))}
 
-        <Separator orientation="vertical" className="h-10" />
+        {!isMobile && <Separator orientation="vertical" className="h-10" />}
 
-        {Object.entries(DATA.contact.social).map(([name, social]) => (
+        {!isMobile && Object.entries(DATA.contact.social).map(([name, social]) => (
           <DockIcon key={name}>
             <Tooltip>
               <TooltipTrigger asChild>

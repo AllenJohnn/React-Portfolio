@@ -1,5 +1,6 @@
-import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { motion, useMotionValue, useReducedMotion, useSpring, useTransform } from "framer-motion";
 import { useRef, ReactNode } from "react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface TiltCardProps {
   children: ReactNode;
@@ -9,6 +10,9 @@ interface TiltCardProps {
 
 export const TiltCard = ({ children, className = "", intensity = 15 }: TiltCardProps) => {
   const ref = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
+  const disableTilt = isMobile || prefersReducedMotion;
   
   const x = useMotionValue(0.5);
   const y = useMotionValue(0.5);
@@ -23,6 +27,7 @@ export const TiltCard = ({ children, className = "", intensity = 15 }: TiltCardP
   });
 
   const handleMouseMove = (e: React.MouseEvent) => {
+    if (disableTilt) return;
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     x.set((e.clientX - rect.left) / rect.width);
@@ -33,6 +38,10 @@ export const TiltCard = ({ children, className = "", intensity = 15 }: TiltCardP
     x.set(0.5);
     y.set(0.5);
   };
+
+  if (disableTilt) {
+    return <div className={`perspective-1000 ${className}`}>{children}</div>;
+  }
 
   return (
     <motion.div
