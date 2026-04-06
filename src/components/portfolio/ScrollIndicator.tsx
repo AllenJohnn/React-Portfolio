@@ -34,23 +34,8 @@ export const ScrollIndicator = () => {
 
       ticking = true;
       requestAnimationFrame(() => {
-        setIsVisible(window.scrollY > 300);
-
-        const sectionElements = sections.map(section => ({
-          id: section.id,
-          element: document.getElementById(section.id),
-        }));
-
-        for (let i = sectionElements.length - 1; i >= 0; i--) {
-          const section = sectionElements[i];
-          if (section.element) {
-            const rect = section.element.getBoundingClientRect();
-            if (rect.top <= window.innerHeight / 2) {
-              setActiveSection(section.id);
-              break;
-            }
-          }
-        }
+        const nextVisibility = window.scrollY > 300;
+        setIsVisible((current) => (current === nextVisibility ? current : nextVisibility));
 
         ticking = false;
       });
@@ -59,6 +44,61 @@ export const ScrollIndicator = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
+  }, [shouldRender]);
+
+  useEffect(() => {
+    if (!shouldRender) {
+      return;
+    }
+
+    const sectionElements = sections
+      .map((section) => document.getElementById(section.id))
+      .filter((element): element is HTMLElement => element !== null);
+
+    if (!sectionElements.length) {
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
+      return;
+    }
+
+    const visibilityById = new Map<string, number>();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          visibilityById.set(entry.target.id, entry.intersectionRatio);
+        }
+
+        let bestId = "home";
+        let bestRatio = -1;
+
+        for (const section of sections) {
+          const ratio = visibilityById.get(section.id) ?? 0;
+          if (ratio > bestRatio) {
+            bestRatio = ratio;
+            bestId = section.id;
+          }
+        }
+
+        if (bestRatio > 0) {
+          setActiveSection((current) => (current === bestId ? current : bestId));
+        }
+      },
+      {
+        threshold: [0.2, 0.35, 0.5, 0.7, 0.9],
+        rootMargin: "-15% 0px -45% 0px",
+      },
+    );
+
+    for (const element of sectionElements) {
+      observer.observe(element);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
   }, [shouldRender]);
 
   const scrollToSection = (sectionId: string) => {

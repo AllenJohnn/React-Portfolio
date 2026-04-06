@@ -80,7 +80,12 @@ export const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) =>
 
   useEffect(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reducedMotion) {
+    const coarsePointer = window.matchMedia("(pointer: coarse)").matches;
+    const saveData = navigator.connection?.saveData ?? false;
+    const lowCoreDevice = (navigator.hardwareConcurrency ?? 8) <= 4;
+
+    // Use native scrolling on devices likely to suffer from JS-driven smooth scrolling.
+    if (reducedMotion || coarsePointer || saveData || lowCoreDevice) {
       return;
     }
 
@@ -130,18 +135,39 @@ export const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) =>
       wheelMultiplier: 0.9,
       touchMultiplier: 1.1,
       smoothWheel: true,
-      syncTouch: true,
+      syncTouch: false,
     });
 
     lenisRef.current = lenis;
 
     let frameId = 0;
+    let rafActive = false;
+
+    const stopRaf = () => {
+      if (!frameId) {
+        return;
+      }
+
+      cancelAnimationFrame(frameId);
+      frameId = 0;
+      rafActive = false;
+    };
+
     const raf = (time: number) => {
       lenis.raf(time);
       frameId = requestAnimationFrame(raf);
     };
 
-    frameId = requestAnimationFrame(raf);
+    const startRaf = () => {
+      if (rafActive || document.visibilityState !== "visible") {
+        return;
+      }
+
+      rafActive = true;
+      frameId = requestAnimationFrame(raf);
+    };
+
+    startRaf();
 
     const resumeLenis = () => {
       healScrollLocks();
@@ -178,33 +204,29 @@ export const SmoothScrollProvider = ({ children }: SmoothScrollProviderProps) =>
 
     const handleVisibilityChange = () => {
       if (document.visibilityState === "visible") {
+        startRaf();
         resumeLenis();
+        return;
       }
-    };
 
-    const lockWatchdogId = window.setInterval(() => {
-      healScrollLocks();
-      lenis.start();
-    }, 1200);
+      stopRaf();
+    };
 
     window.addEventListener("pageshow", resumeLenis);
     document.addEventListener("visibilitychange", handleVisibilityChange);
     window.addEventListener("wheel", recoverOnInput, { passive: true });
-    window.addEventListener("touchmove", recoverOnInput, { passive: true });
     window.addEventListener("touchstart", recoverOnInput, { passive: true });
     window.addEventListener("keydown", handleScrollKey, { passive: true });
-    window.addEventListener("resize", healScrollLocks);
+    window.addEventListener("resize", recoverOnInput, { passive: true });
 
     return () => {
-      cancelAnimationFrame(frameId);
-      window.clearInterval(lockWatchdogId);
+      stopRaf();
       window.removeEventListener("pageshow", resumeLenis);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("wheel", recoverOnInput);
-      window.removeEventListener("touchmove", recoverOnInput);
       window.removeEventListener("touchstart", recoverOnInput);
       window.removeEventListener("keydown", handleScrollKey);
-      window.removeEventListener("resize", healScrollLocks);
+      window.removeEventListener("resize", recoverOnInput);
       lenis.destroy();
       lenisRef.current = null;
       unlockScroll(true);

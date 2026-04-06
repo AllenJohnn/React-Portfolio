@@ -11,10 +11,8 @@ import { SectionDivider } from "@/components/portfolio/SectionDivider";
 import { ThemeSwitcher } from "@/components/portfolio/ThemeSwitcher";
 import { SEO } from "@/components/SEO";
 import { Suspense, lazy } from "react";
-import { motion, useReducedMotion } from "framer-motion";
-import { SmoothCursor } from "@/components/ui/smooth-cursor";
+import { motion } from "framer-motion";
 import { SectionParallaxTransition } from "@/components/portfolio/ParallaxSection";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 const ProjectsEnhanced = lazy(() => import("@/components/portfolio/ProjectsEnhanced").then((module) => ({ default: module.ProjectsEnhanced })));
 const ContactEnhanced = lazy(() => import("@/components/portfolio/ContactEnhanced").then((module) => ({ default: module.ContactEnhanced })));
@@ -24,14 +22,9 @@ const SectionLoader = () => (
 );
 
 const Index = () => {
-  const isMobile = useIsMobile();
-  const prefersReducedMotion = useReducedMotion();
-  const enableSmoothCursor = !isMobile && !prefersReducedMotion;
-
   return (
     <>
       <SEO />
-      {enableSmoothCursor && <SmoothCursor />}
       <ThemeSwitcher />
       <motion.main
         className="relative min-h-screen overflow-x-hidden"

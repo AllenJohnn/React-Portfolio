@@ -1,8 +1,9 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Github, Linkedin, Mail, ArrowUp, Code, Zap } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUp } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useSmoothScroll } from "@/components/ui/smooth-scroll-provider";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const quickLinks = [
   { href: "#about", label: "About" },
@@ -14,6 +15,8 @@ const quickLinks = [
 
 export const Footer = () => {
   const ref = useRef(null);
+  const isMobile = useIsMobile();
+  const disableHeavyEffects = isMobile;
   const isInView = useInView(ref, { once: true, margin: "-50px" });
   const [showBackToTop, setShowBackToTop] = useState(false);
   const { scrollTo } = useSmoothScroll();
@@ -41,13 +44,13 @@ export const Footer = () => {
       <div className="absolute inset-0 bg-gradient-to-t from-primary/[0.05] to-transparent" />
       <motion.div 
         className="absolute top-0 left-1/4 w-48 h-48 md:w-96 md:h-96 bg-primary/5 rounded-full blur-3xl"
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 8, repeat: Infinity }}
+        animate={disableHeavyEffects ? { scale: 1, opacity: 0.35 } : { scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+        transition={disableHeavyEffects ? { duration: 0.2 } : { duration: 8, repeat: Infinity }}
       />
       <motion.div 
         className="absolute bottom-0 right-1/4 w-48 h-48 md:w-96 md:h-96 bg-accent/5 rounded-full blur-3xl"
-        animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
-        transition={{ duration: 10, repeat: Infinity, delay: 2 }}
+        animate={disableHeavyEffects ? { scale: 1.05, opacity: 0.35 } : { scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+        transition={disableHeavyEffects ? { duration: 0.2 } : { duration: 10, repeat: Infinity, delay: 2 }}
       />
       
       <div className="container mx-auto px-4 md:px-[8%] relative z-10">
@@ -184,8 +187,8 @@ export const Footer = () => {
             aria-label="Back to top"
           >
             <motion.div
-              animate={{ y: [0, -4, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
+              animate={disableHeavyEffects ? { y: 0 } : { y: [0, -4, 0] }}
+              transition={disableHeavyEffects ? { duration: 0.2 } : { duration: 1.5, repeat: Infinity }}
             >
               <ArrowUp size={18} />
             </motion.div>

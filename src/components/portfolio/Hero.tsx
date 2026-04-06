@@ -19,7 +19,7 @@ export const Hero = () => {
   const { scrollY } = useScroll();
   const yDistance = prefersReducedMotion ? 0 : isMobile ? 24 : 80;
   const y = useTransform(scrollY, [0, 500], [0, yDistance]);
-  const smoothY = useSpring(y, { stiffness: 120, damping: 24, mass: 0.45 });
+  const smoothY = useSpring(y, { stiffness: 85, damping: 24, mass: 0.45 });
   const heroOpacity = useTransform(scrollY, [0, 300], [1, prefersReducedMotion ? 1 : 0.93]);
   const heroScale = useTransform(scrollY, [0, 350], [1, prefersReducedMotion ? 1 : isMobile ? 0.995 : 0.985]);
 
@@ -33,7 +33,7 @@ export const Hero = () => {
 
       <div className="absolute top-0 right-0 w-[60%] h-full bg-gradient-to-bl from-primary/[0.08] via-accent/[0.05] to-transparent rounded-bl-[50%] z-0 hidden md:block" />
       
-      <motion.div style={{ y: disableHeavyEffects ? 0 : smoothY, opacity: heroOpacity, scale: heroScale }} className="relative z-10 container mx-auto px-4 sm:px-6 md:px-[8%] pt-24 md:pt-32 pb-20 md:pb-24">
+      <motion.div style={{ y: disableHeavyEffects ? 0 : smoothY, opacity: heroOpacity, scale: heroScale }} className="relative z-10 container mx-auto px-4 sm:px-6 md:px-[8%] pt-24 md:pt-32 pb-20 md:pb-24 will-change-transform">
         <div className="flex flex-col lg:flex-row flex-wrap justify-between items-center gap-8 md:gap-12">
           <motion.div
             initial={{ opacity: 0 }}
@@ -149,7 +149,7 @@ export const Hero = () => {
                   scale: [1, 1.02, 1],
                 } : { rotate: 0, scale: 1 }}
                 transition={!disableHeavyEffects ? { duration: 6, repeat: Infinity, ease: "easeInOut" } : { duration: 0.2 }}
-                className="absolute -top-5 -left-5 right-5 bottom-5 border-2 border-primary/30 rounded-2xl z-0" 
+                className="absolute -top-5 -left-5 right-5 bottom-5 border-2 border-primary/30 rounded-2xl z-0 hidden md:block will-change-transform" 
               />
               <motion.div 
                 animate={!disableHeavyEffects ? {
@@ -157,7 +157,7 @@ export const Hero = () => {
                   scale: [1, 1.01, 1],
                 } : { rotate: 0, scale: 1 }}
                 transition={!disableHeavyEffects ? { duration: 8, repeat: Infinity, ease: "easeInOut", delay: 0.5 } : { duration: 0.2 }}
-                className="absolute -top-8 -left-8 right-8 bottom-8 border border-accent/20 rounded-2xl z-0" 
+                className="absolute -top-8 -left-8 right-8 bottom-8 border border-accent/20 rounded-2xl z-0 hidden md:block will-change-transform" 
               />
               
               
